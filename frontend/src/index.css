@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+body{
+  margin: 0;
+  max-width: 100vw;
+}
+
+
+.navigation {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: white; /* Adjust as needed */
+  /* Add other styling properties */
+}
+
+.products-carousel {
+  position: relative;
+  z-index: 0; 
+}
+
+
+
+
+

@@ -1,0 +1,36 @@
+server:
+  port: 7070
+spring:
+  application:
+    name: market
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce
+    username: ecommerce
+    password: azerty
+  jpa:
+    properties:
+      hibernate:
+        format_sql: "false"
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: noreplyn789@gmail.com
+    password: jjcnqymkupwlnrzo
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+app:
+  jwtSecret: 442A472D4B7150645367566B597033P3367639792442264528482B4D62516MQ468576D5A713474377721AP87R32A462D4A404E635266556A586E329LFNWT5ASL
+  jwtExpiration: 86400000
+  refresh-token:
+    jwtRefreshExpiration: 604800000
+
