@@ -7,12 +7,12 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useLocation } from 'react-router';
 import DeliveryAddress from './DeliveryAddress';
-import Order from './Order';
+import Order from './OrderItems';
 
 const steps = ['delivery address', 'Order summary' , 'Payment'];
 
 export default function Checkout() {
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState(1);
   const location = useLocation()
   const query = new URLSearchParams(location.search)
 
@@ -31,7 +31,7 @@ export default function Checkout() {
   return (
     <div className='pt-24 px-10 lg:px-20'>
         <Box sx={{ width: '100%' }}>
-      <Stepper activeStep={activeStep}>
+      <Stepper activeStep={step}>
         {steps.map((label, index) => {
           const stepProps = {};
           const labelProps = {};
@@ -61,11 +61,11 @@ export default function Checkout() {
             >
               Back
             </Button>
-            <Box sx={{ flex: '1 1 auto' }} />
+          
         
           </Box>
 
-          <div>
+          <div className='mt-10'>
             {step==1 ? <DeliveryAddress/> : <Order/>}
           </div>
         </React.Fragment>

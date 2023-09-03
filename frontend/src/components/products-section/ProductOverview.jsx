@@ -4,6 +4,7 @@ import { RadioGroup } from '@headlessui/react'
 import { Box, Grid, LinearProgress, Rating } from '@mui/material'
 import ReviewCard from './ReviewCard'
 import ProductCard from './ProductCard'
+import { useNavigate } from 'react-router'
 
 const product = {
   name: 'Basic Tee 6-Pack',
@@ -55,11 +56,14 @@ const product = {
 }
 const reviews = { href: '#', average: 4, totalCount: 117 }
 
+
+
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
 
 export default function ProductOverview() {
+  const navigate = useNavigate()
   const [selectedColor, setSelectedColor] = useState(product.colors[0])
   const [selectedSize, setSelectedSize] = useState(product.sizes[2])
 
@@ -211,6 +215,7 @@ export default function ProductOverview() {
               </div>
 
               <button
+                onClick={() => navigate("/cart")}
                 type="submit"
                 className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-blue px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >

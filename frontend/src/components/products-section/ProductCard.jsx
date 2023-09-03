@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router";
 
 const ProductCard = ({ product }) => {
+  const navigate = useNavigate()
   return (
-    <div className="w-[14rem] m-3 cursor-pointer transition duration-200 ease-out ">
+    <div onClick={() => navigate(`/product/${5}`)} className="w-[14rem] m-3 cursor-pointer transition duration-200 ease-out ">
       <div className="h-[20rem]">
         <img
           src="https://images.unsplash.com/photo-1595078475328-1ab05d0a6a0e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"

@@ -18,6 +18,10 @@ import {
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router";
 
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
+
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
   { name: "Best Rating", href: "#", current: false },
@@ -70,7 +74,7 @@ const filters = [
 
 
 
-export default function Product() {
+export default function ProductList() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();

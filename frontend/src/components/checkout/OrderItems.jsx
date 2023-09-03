@@ -1,12 +1,16 @@
-import { Button, Divider } from "@mui/material";
-import CartItem from "./CartItem";
-import { useNavigate } from "react-router";
+import { Button, Divider } from "@mui/material"
+import AddressCard from "./AddressCard"
+import CartItem from "../cart/CartItem"
 
-const Cart = () => {
-  const navigate = useNavigate()
+const OrderItems = () => {
   return (
-    <div className="pt-24">
-      <div className=" lg:grid grid-cols-3 lg:px-16 relative">
+    <div>
+      <div className="p-5 shadow-lg rounded-s-md border border-fog">
+        <AddressCard/>
+      </div>
+
+      <div className="pt-2">
+      <div className=" lg:grid grid-cols-3 relative">
         <div className="col-span-2 ">
           {[1,1,1,1,1].map((item , key) => <CartItem key={key}/>)}
         </div>
@@ -32,7 +36,7 @@ const Cart = () => {
 
             <hr/>
             <Button
-            onClick={() => navigate("/checkout")}
+            
             variant="contained"
             className="w-full mt-5"
             sx={{
@@ -49,7 +53,8 @@ const Cart = () => {
         </div>
       </div>
     </div>
-  );
-};
+    </div>
+  )
+}
 
-export default Cart;
+export default OrderItems

@@ -2,6 +2,8 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router'
+import { Avatar, Button, Menu, MenuItem } from '@mui/material'
 
 const navigation = {
   categories: [
@@ -131,7 +133,31 @@ function classNames(...classes) {
 }
 
 export default function Navigation() {
+  const navigate = useNavigate()
+
   const [open, setOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(null)
+
+  //const token = localStorage.getItem("token")
+
+  const handleUserClick = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleCloseUserMenu = () => {
+    setAnchorEl(null)
+  }
+
+  const handleCategoryClick = (category,section,item,close) => {
+    navigate(`/${category.id}/${section.id}/${item.name}`)
+    close();
+  }
+
+  const handleLogout = () => {
+    handleCloseUserMenu()
+  }
+  const handleMyOrderClick = () => {
+    handleCloseUserMenu()
+  }
 
   return (
     <div className="bg-white">
@@ -298,7 +324,7 @@ export default function Navigation() {
                   <span className="sr-only">Your Company</span>
                   <img
                     className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                    src="../assets/sport.png"
                     alt=""
                   />
                 </a>
@@ -373,9 +399,20 @@ export default function Navigation() {
                                           >
                                             {section.items.map((item) => (
                                               <li key={item.name} className="flex">
-                                                <a href={item.href} className="hover:text-gray-800">
-                                                  {item.name}
-                                                </a>
+                                                <p 
+                                                onClick={() => 
+                                                handleCategoryClick(
+                                                  category,
+                                                  section,
+                                                  item,
+                                                  close
+                                                  )
+                                                  } 
+                                                  className='cursor-pointer hover:text-fog'
+                                                  >
+                                                    {item.name}
+                                                  </p>
+                                                
                                               </li>
                                             ))}
                                           </ul>
@@ -406,26 +443,36 @@ export default function Navigation() {
 
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                    Sign in
-                  </a>
-                  <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
-                  <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                    Create account
-                  </a>
+                { true ? 
+                  (
+                  <div>
+                    <Avatar
+                    className='text-white'
+                    onClick={handleUserClick}
+                    aria-controls={open ? "basic-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+
+                    >
+                      Y
+                    </Avatar>
+                    <Menu id='basic-menu' anchorEl={anchorEl} onClose={handleCloseUserMenu} MenuListProps={{"aria-labelledby":"basic-button"}}>
+                      <MenuItem onClick={handleCloseUserMenu}>Profile</MenuItem>
+                      <MenuItem onClick={handleMyOrderClick}>Orders</MenuItem>
+                      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+
+                    </Menu>
+                  </div>) 
+                  : 
+                  (<>
+                  <Button className=' bg-primary' onClick={() => navigate("/login")}>
+                    Sign In
+                  </Button>
+                  </>)}
+                  
                 </div>
 
-                <div className="hidden lg:ml-8 lg:flex">
-                  <a href="#" className="flex items-center text-gray-700 hover:text-gray-800">
-                    <img
-                      src="https://tailwindui.com/img/flags/flag-canada.svg"
-                      alt=""
-                      className="block h-auto w-5 flex-shrink-0"
-                    />
-                    <span className="ml-3 block text-sm font-medium">CAD</span>
-                    <span className="sr-only">, change currency</span>
-                  </a>
-                </div>
+               
 
                 {/* Search */}
                 <div className="flex lg:ml-6">
@@ -439,6 +486,7 @@ export default function Navigation() {
                 <div className="ml-4 flow-root lg:ml-6">
                   <a href="#" className="group -m-2 flex items-center p-2">
                     <ShoppingBagIcon
+                      onClick={() => navigate("/cart")}
                       className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                       aria-hidden="true"
                     />
