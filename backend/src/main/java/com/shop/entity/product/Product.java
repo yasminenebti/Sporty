@@ -25,10 +25,10 @@ public class Product {
     private String name;
 
     private String description;
-    private Integer price;
+    private float price;
     private Integer discount;
 
-    private Integer discountedPrice;
+    private float discountedPrice;
     private Integer quantity;
     private String color;
     private String image;

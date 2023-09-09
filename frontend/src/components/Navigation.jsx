@@ -1,9 +1,11 @@
 
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router'
+import {  useNavigate } from 'react-router'
 import { Avatar, Button, Menu, MenuItem } from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
+import { currentUser, logoutAccount } from '../redux/auth/Action'
 
 const navigation = {
   categories: [
@@ -134,15 +136,20 @@ function classNames(...classes) {
 
 export default function Navigation() {
   const navigate = useNavigate()
+  const token = localStorage.getItem("token") 
+  const dispatch = useDispatch()
+  const authState = useSelector((state) => state.authState);
+  console.log(authState)
+
 
   const [open, setOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
+  const openUserMenu = Boolean(anchorEl);
 
-  //const token = localStorage.getItem("token")
-
-  const handleUserClick = (event) => {
-    setAnchorEl(event.currentTarget)
-  }
+  
+  const handleUserClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
   const handleCloseUserMenu = () => {
     setAnchorEl(null)
   }
@@ -151,16 +158,28 @@ export default function Navigation() {
     navigate(`/${category.id}/${section.id}/${item.name}`)
     close();
   }
+  const handleProfile = () => {
+    navigate("/")
+  }
 
   const handleLogout = () => {
+    dispatch(logoutAccount())
     handleCloseUserMenu()
   }
   const handleMyOrderClick = () => {
+    navigate("/account/order")
     handleCloseUserMenu()
   }
 
+  useEffect(() => {
+    if(token)
+    dispatch(currentUser(token))
+  
+  },[token, dispatch, navigate])
+
+
   return (
-    <div className="bg-white">
+    <div className="bg-white pb-10">
       {/* Mobile menu */}
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-40   lg:hidden" onClose={setOpen}>
@@ -201,15 +220,15 @@ export default function Navigation() {
 
                 {/* Links */}
                 <Tab.Group as="div" className="mt-2">
-                  <div className="border-b border-gray-200 ">
+                  <div className="border-b border-primary ">
                     <Tab.List className="-mb-px flex space-x-8 px-4 ">
                       {navigation.categories.map((category) => (
                         <Tab
                           key={category.name}
                           className={({ selected }) =>
                             classNames(
-                              selected ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-900',
-                              'flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium'
+                              selected ? 'border-primary text-indigo-600' : 'border-transparent text-gray-900',
+                              'flex-1 whitespace-nowrap border-b border-primary px-1 py-4 text-base font-medium'
                             )
                           }
                         >
@@ -262,7 +281,7 @@ export default function Navigation() {
                   </Tab.Panels>
                 </Tab.Group>
 
-                <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+                <div className="space-y-6 border-t border-grey px-4 py-6">
                   {navigation.pages.map((page) => (
                     <div key={page.name} className="flow-root">
                       <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
@@ -272,7 +291,7 @@ export default function Navigation() {
                   ))}
                 </div>
 
-                <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+                <div className="space-y-6 border-t border-grey px-4 py-6">
                   <div className="flow-root">
                     <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
                       Sign in
@@ -285,7 +304,7 @@ export default function Navigation() {
                   </div>
                 </div>
 
-                <div className="border-t border-gray-200 px-4 py-6">
+                <div className="border-t border-grey px-4 py-6">
                   <a href="#" className="-m-2 flex items-center p-2">
                     <img
                       src="https://tailwindui.com/img/flags/flag-canada.svg"
@@ -305,8 +324,8 @@ export default function Navigation() {
       <header className="relative bg-white">
         
 
-        <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="border-b border-gray-200">
+        <nav aria-label="Top" className="mx-auto max-w-9xl px-6 sm:px-2 lg:px-4">
+          <div className="border-b border-grey">
             <div className="flex h-16 items-center">
               <button
                 type="button"
@@ -318,17 +337,8 @@ export default function Navigation() {
                 <Bars3Icon className="h-6 w-6" aria-hidden="true" />
               </button>
 
-              {/* Logo */}
-              <div className="ml-4 flex lg:ml-0">
-                <a href="#">
-                  <span className="sr-only">Your Company</span>
-                  <img
-                    className="h-8 w-auto"
-                    src="../assets/sport.png"
-                    alt=""
-                  />
-                </a>
-              </div>
+              
+              
 
               {/* Flyout menus */}
               <Popover.Group className="hidden lg:ml-8 lg:block lg:self-stretch">
@@ -341,9 +351,9 @@ export default function Navigation() {
                             <Popover.Button
                               className={classNames(
                                 open
-                                  ? 'border-indigo-600 text-indigo-600 '
-                                  : 'border-transparent text-gray-700 hover:text-gray-800 ',
-                                'relative z-10  -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out'
+                                  ? 'border-grey text-indigo-600 '
+                                  : 'border-grey text-gray-700 hover:text-gray-800 ',
+                                'relative z-10  -mb-px flex items-center border-b border-grey pt-px text-sm font-medium transition-colors duration-200 ease-out'
                               )}
                             >
                               {category.name}
@@ -443,21 +453,29 @@ export default function Navigation() {
 
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                { true ? 
+                { authState?.reqUser ? 
                   (
                   <div>
                     <Avatar
-                    className='text-white'
+                    className='cursor-pointer text-white'
                     onClick={handleUserClick}
-                    aria-controls={open ? "basic-menu" : undefined}
                     aria-haspopup="true"
-                    aria-expanded={open ? "true" : undefined}
+                    aria-expanded={openUserMenu ? "true" : undefined}
+                    id="basic-button"
+                    aria-controls={openUserMenu ? 'basic-menu' : undefined}
 
                     >
-                      Y
+                      {authState?.reqUser.firstName[0].toUpperCase()}
                     </Avatar>
-                    <Menu id='basic-menu' anchorEl={anchorEl} onClose={handleCloseUserMenu} MenuListProps={{"aria-labelledby":"basic-button"}}>
-                      <MenuItem onClick={handleCloseUserMenu}>Profile</MenuItem>
+                    <Menu 
+                    id='basic-menu' 
+                    anchorEl={anchorEl} 
+                    onClose={handleCloseUserMenu} 
+                    MenuListProps={{"aria-labelledby":"basic-button"}}
+                    open={openUserMenu}
+              
+                    >
+                      <MenuItem onClick={handleProfile}>Profile</MenuItem>
                       <MenuItem onClick={handleMyOrderClick}>Orders</MenuItem>
                       <MenuItem onClick={handleLogout}>Logout</MenuItem>
 

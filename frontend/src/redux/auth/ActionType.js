@@ -1,0 +1,20 @@
+export const REGISTER_SUCCESS = "REGISTER_SUCCESS"
+export const REGISTER_ERROR = "REGISTER_ERROR"
+export const REGISTER_REQUEST = "REGISTER_REQUEST"
+
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS"
+export const LOGIN_ERROR = "LOGIN_ERROR"
+export const LOGIN_REQUEST = "LOGIN_REQUEST"
+
+
+export const REQ_USER = "REQ_USER"
+export const REQ_USER_SUCCESS = "REQ_USER_SUCCESS"
+export const REQ_USER_ERROR = "REQ_USER_ERROR"
+
+export const UPDATE_USER = "UPDATE_USER"
+export const UPDATE_USER_ERROR = "UPDATE_USER"
+export const UPDATE_USER_SUCCESS = "UPDATE_USER"
+export const LOGOUT = "LOGOUT"
+
+
+

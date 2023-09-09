@@ -28,8 +28,8 @@ public class OrderItem {
     private String size;
     private Integer quantity;
 
-    private Integer price;
-    private Integer priceAfterDiscount;
+    private float price;
+    private float priceAfterDiscount;
     private Long userId;
 
     private LocalDateTime deliveryAt;

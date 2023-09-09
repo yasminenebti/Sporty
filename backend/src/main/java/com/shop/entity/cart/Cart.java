@@ -26,7 +26,7 @@ public class Cart {
 
     private double totalPrice;
     private int totalItems;
-    private int totalPriceAfterDiscount;
-    private int discount;
+    private float totalPriceAfterDiscount;
+    private float discount;
 
 }

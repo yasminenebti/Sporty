@@ -102,8 +102,8 @@ public class CartService {
                     .userId(currentUser.id())
                     .build();
 
-            int price = itemsToAdd.getQuantity() * product.getPrice();
-            int discountedPrice = itemsToAdd.getQuantity() * product.getDiscountedPrice();
+            float price = itemsToAdd.getQuantity() * product.getPrice();
+            float discountedPrice = itemsToAdd.getQuantity() * product.getDiscountedPrice();
 
             cartItem.setPrice(price);
             cartItem.setPriceAfterDiscount(discountedPrice);
@@ -124,8 +124,8 @@ public class CartService {
     public CartRequest findCart(){
         UserRequest currentUser = authService.getCurrentUser();
         Cart cart = cartRepository.getCartByUser(currentUser.id());
-        int price = 0;
-        int discountPrice = 0;
+        float price = 0;
+        float discountPrice = 0;
         int totalItems = 0;
 
         for(CartItem cartItem : cart.getCartItems()){

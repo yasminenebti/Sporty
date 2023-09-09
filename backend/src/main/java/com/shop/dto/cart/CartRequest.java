@@ -17,6 +17,6 @@ public class CartRequest {
     private Set<CartItemRequest> cartItems = new HashSet<>();
     private double totalPrice;
     private Integer totalItems;
-    private Integer priceAfterDiscount;
-    private Integer discount;
+    private float priceAfterDiscount;
+    private float discount;
 }

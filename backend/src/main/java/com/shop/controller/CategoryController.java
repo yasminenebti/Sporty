@@ -21,6 +21,10 @@ public class CategoryController {
     ) throws ProductException {
         return ResponseEntity.ok(categoryService.createCategory(category));
     }
+    @GetMapping
+    public ResponseEntity<?> getAllCategories(){
+        return ResponseEntity.ok(categoryService.getCategories());
+    }
 
     @GetMapping("/{categoryId}")
     public ResponseEntity<?> findCategoryById(@PathVariable Long categoryId) throws CategoryException {

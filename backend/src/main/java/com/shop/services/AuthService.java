@@ -1,10 +1,12 @@
 package com.shop.services;
 
+import com.shop.dto.cart.CartRequest;
 import com.shop.dto.user.AuthRequest;
 import com.shop.dto.user.AuthenticationResponse;
 import com.shop.dto.user.RegisterRequest;
 import com.shop.dto.user.UserRequest;
 import com.shop.email.EmailSender;
+import com.shop.entity.cart.Cart;
 import com.shop.entity.user.Role;
 import com.shop.entity.user.User;
 import com.shop.exception.UserException;
@@ -16,6 +18,8 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,9 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,8 +42,17 @@ public class AuthService {
     private final VerificationTokenService verificationTokenService;
     private final AuthenticationManager authenticationManager;
 
+    private CartService cartService; // Remove final
+
+    @Autowired
+    public void setCartService(@Lazy CartService cartService) {
+        this.cartService = cartService;
+    }
+
+
+
     //*****************Auth Part**********************
-    public AuthenticationResponse register(RegisterRequest request) throws MessagingException {
+    public AuthenticationResponse register(RegisterRequest request) throws MessagingException, UserException {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             return AuthenticationResponse.builder()
                     .message("Email already exists")
@@ -69,9 +80,9 @@ public class AuthService {
         var refreshToken = jwtService.generateRefreshToken(user);
         verificationTokenService.saveVerificationToken(jwtToken,user);
         String userToken = verificationTokenService.getToken(jwtToken);
+        cartService.initiateCart(user.getId());
 
-
-        String link = "http://localhost:9200/api/v1/auth/validateAccount/" + userToken;
+        String link = "http://localhost:7070/api/v1/auth/validateAccount/" + userToken;
         emailSender.sendEmail(request.getEmail(),createHtmlEmail(request.getFirstName() , link) , "Confirm your email");
 
         return AuthenticationResponse

@@ -8,6 +8,7 @@ import com.shop.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,5 +31,9 @@ public class CategoryService {
             return category.get();
         }
         else throw new CategoryException("category not found");
+    }
+
+    public List<Category> getCategories() {
+        return categoryRepository.findAll();
     }
 }

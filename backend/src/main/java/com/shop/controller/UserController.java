@@ -4,6 +4,7 @@ import com.shop.dto.user.AuthRequest;
 import com.shop.dto.user.AuthenticationResponse;
 import com.shop.dto.user.RegisterRequest;
 import com.shop.dto.user.UserRequest;
+import com.shop.exception.UserException;
 import com.shop.services.AuthService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ public class UserController {
     private final AuthService authService;
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request) throws MessagingException {
+            @RequestBody RegisterRequest request) throws MessagingException, UserException {
         return ResponseEntity.ok(authService.register(request));
     }
 

@@ -40,9 +40,9 @@ public class Order {
 
     private double totalPrice;
     private double totalPriceDiscounted;
-    private Integer priceAfterDiscount;
+    private float priceAfterDiscount;
 
-    private Integer discount;
+    private float discount;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 

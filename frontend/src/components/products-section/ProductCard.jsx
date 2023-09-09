@@ -1,7 +1,6 @@
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router";
 
-const ProductCard = ({ product }) => {
+const ProductCard = () => {
   const navigate = useNavigate()
   return (
     <div onClick={() => navigate(`/product/${5}`)} className="w-[14rem] m-3 cursor-pointer transition duration-200 ease-out ">
@@ -29,8 +28,6 @@ const ProductCard = ({ product }) => {
   );
 };
 
-ProductCard.propTypes = {
-  product: PropTypes.func.isRequired,
-};
+
 
 export default ProductCard;

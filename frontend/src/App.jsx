@@ -17,7 +17,7 @@ function App() {
   
 
   return (
-    <div>
+    <>
       <div className="navigation">
         <Navigation/></div>
       <Routes>
@@ -35,7 +35,7 @@ function App() {
       </Routes>
       
       <Footer/>
-    </div>
+    </>
   )
 }
 
