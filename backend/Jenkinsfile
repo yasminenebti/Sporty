@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    tools{
+        maven 'maven'
+    }
+    stages {
+        stage('Build Maven') {
+            steps {
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/yasminenebti/Sporty']])
+                dir('backend') {
+                    bat 'mvn clean package'
+                }
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script{
+                    dir('backend') {
+                    bat 'docker build -t yasminenebti/sporty .'
+                }
+
+                }
+            }
+        }
+    }
+}
