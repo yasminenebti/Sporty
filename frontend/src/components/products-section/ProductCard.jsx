@@ -1,33 +1,38 @@
 import { useNavigate } from "react-router";
+import PropTypes from 'prop-types';
 
-const ProductCard = () => {
+
+const ProductCard = ({product}) => {
   const navigate = useNavigate()
   return (
-    <div onClick={() => navigate(`/product/${5}`)} className="w-[14rem] m-3 cursor-pointer transition duration-200 ease-out ">
+    <div onClick={() => navigate(`/product/${product.id}`)} className="w-[14rem] m-3 cursor-pointer transition duration-200 ease-out ">
       <div className="h-[20rem]">
         <img
-          src="https://images.unsplash.com/photo-1595078475328-1ab05d0a6a0e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+        src={product.image}
           alt=""
-          className="h-full w-full object-cover object-left-top"
+          className="h-full w-full object-fit object-left-top"
         />
       </div>
 
       <div className="bg-white">
         {" "}
         <div>
-          <p className="font-bold opacity-60">equipement</p>{" "}
-          <p className="">get better and healthier</p>
+          <p className="font-bold opacity-60">{product.name}</p>{" "}
+          <p className="max-w-md">{product.description}</p>
         </div>
         <div className="flex items-center space-x-2">
-          <p className="font-semibold">100$</p>
-          <p className=" line-through opacity-50">100$</p>
-          <p className=" text-secondary font-semibold">100$</p>
+          <p className="font-semibold">{product.discountedPrice}</p>
+          <p className=" line-through opacity-50">{product.price}</p>
+          <p className=" text-secondary font-semibold pl-10">{product.discount}%</p>
         </div>
       </div>
     </div>
   );
 };
 
+ ProductCard.propTypes = {
+   product: PropTypes.object.isRequired,  
+ };
 
 
 export default ProductCard;

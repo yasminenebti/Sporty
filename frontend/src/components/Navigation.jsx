@@ -10,8 +10,8 @@ import { currentUser, logoutAccount } from '../redux/auth/Action'
 const navigation = {
   categories: [
     {
-      id: 'women',
-      name: 'Women',
+      id: 'Fitness & Workout',
+      name: 'Fitness & Workout',
       featured: [
         {
           name: 'New Arrivals',
@@ -28,48 +28,38 @@ const navigation = {
       ],
       sections: [
         {
-          id: 'clothing',
-          name: 'Clothing',
+          id: 'ExerciseEquipment',
+          name: 'ExerciseEquipment',
           items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Dresses', href: '#' },
-            { name: 'Pants', href: '#' },
-            { name: 'Denim', href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
+            { name: 'Cardio Machines', href: '#' },
+            { name: "Yoga & Pilates", href: '#' },
           ],
         },
         {
-          id: 'accessories',
-          name: 'Accessories',
+          id: "MenActivewear",
+          name: "Men's Activewear",
           items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
+            { name: 'Performance Tops', href: '#' },
+            { name: 'Athletic Bottoms', href: '#' },
+            { name: 'Outerwear & Jackets', href: '#' },
+            { name: 'Sports Footwear & Accessories', href: '#' },
           ],
         },
         {
-          id: 'brands',
-          name: 'Brands',
+          id: "WomenActivewear",
+          name: "Women's Activewear",
           items: [
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Significant Other', href: '#' },
+            { name: 'Sports Bras & Tops', href: '#' },
+            { name: 'Leggings & Bottoms', href: '#' },
+            { name: 'Athletic Footwear & Accessories', href: '#' },
+            { name: 'Hoodies & Sweatshirts', href: '#' },
           ],
         },
       ],
     },
     {
-      id: 'men',
-      name: 'Men',
+      id: 'Nutrition and vitamins',
+      name: 'Nutrition and vitamins',
       featured: [
         {
           name: 'New Arrivals',
@@ -86,41 +76,7 @@ const navigation = {
         },
       ],
       sections: [
-        {
-          id: 'clothing',
-          name: 'Clothing',
-          items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Pants', href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
-          ],
-        },
-        {
-          id: 'accessories',
-          name: 'Accessories',
-          items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
-          ],
-        },
-        {
-          id: 'brands',
-          name: 'Brands',
-          items: [
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
-          ],
-        },
+        
       ],
     },
   ],
@@ -139,8 +95,9 @@ export default function Navigation() {
   const token = localStorage.getItem("token") 
   const dispatch = useDispatch()
   const authState = useSelector((state) => state.authState);
-  console.log(authState)
 
+
+  
 
   const [open, setOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
@@ -155,7 +112,7 @@ export default function Navigation() {
   }
 
   const handleCategoryClick = (category,section,item,close) => {
-    navigate(`/${category.id}/${section.id}/${item.name}`)
+    navigate(`/${category.name}/${section.name}/${item.name}`)
     close();
   }
   const handleProfile = () => {
@@ -518,5 +475,4 @@ export default function Navigation() {
         </nav>
       </header>
     </div>
-  )
-}
+  )}

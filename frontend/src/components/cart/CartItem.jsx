@@ -1,27 +1,27 @@
 import { Button, IconButton } from "@mui/material"
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import PropTypes from 'prop-types';
 
-const CartItem = () => {
+const CartItem = ({cartItem}) => {
   return (
     <div className="p-5 shadow-lg border border-grey rounded-md">
         <div className="flex items-center">
             <div className="w-[5rem] h-[5rem] lg:w-[9rem] lg:[9rem]">
               <img 
                  className=" w-full h-full object-cover object-top" 
-                 src="https://images.unsplash.com/photo-1595078475328-1ab05d0a6a0e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"/>
+                 src={cartItem?.productImage || 'image'}/>
             </div>
 
             <div className="ml-5 space-y-1">
 
-              <p className="font-semibold">Product Name</p>
-              <p className="opacity-70">Size: L,White</p>
-              <p className="opacity-70 mt-2">Product Name</p>
+              <p className="font-semibold">{cartItem?.productName || 'name'}</p>
+              <p className="opacity-70">{cartItem?.size || 'size'}</p>
 
-             <div className="flex space-x-5 items-center text-lg lg:text-xl text-grey mt-10">
-                <p className="font-semibold">100$</p>
-                <p className=" line-through opacity-50">100$</p>
-                <p className=" text-secondary font-semibold">100$</p>
+             <div className="flex space-x-5 items-center text-lg lg:text-xl text-brown mt-10">
+                <p className="font-semibold">${cartItem?.priceAfterDiscount || 'priceAfterDiscount'} </p>
+                <p className=" line-through opacity-50">${cartItem?.price || 'price'} </p>
+                <p className=" text-secondary font-semibold pl-10">{cartItem?.discount || 'discount'} %</p>
                </div>
             </div>
            
@@ -46,5 +46,9 @@ const CartItem = () => {
     </div>
   )
 }
+
+CartItem.propTypes = {
+  cartItem: PropTypes.object.isRequired,  
+};
 
 export default CartItem

@@ -1,5 +1,6 @@
 package com.shop.services;
 
+import com.shop.dto.CategoryLevels;
 import com.shop.entity.product.Category;
 import com.shop.entity.product.Product;
 import com.shop.exception.CategoryException;
@@ -32,6 +33,17 @@ public class CategoryService {
         }
         else throw new CategoryException("category not found");
     }
+
+    public List<Category> getLevelOneCategory()  {
+        return categoryRepository.getLevelOneCategory();
+    }
+    public List<Category> getLevelTwoCategory(Long categoryId)  {
+        return categoryRepository.getLevelTwoCategory(categoryId);
+    }
+    public List<Category> getLevelThreeCategory(Long categoryId)  {
+        return categoryRepository.getLevelThreeCategory(categoryId);
+    }
+
 
     public List<Category> getCategories() {
         return categoryRepository.findAll();

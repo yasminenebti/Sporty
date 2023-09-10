@@ -47,19 +47,19 @@ public class ProductService {
 
     public Page<Product> getFilteredProducts(
             String category,
-            Integer minPrice,
-            Integer maxPrice,
+            Float minPrice,
+            Float maxPrice,
             Integer discount,
             String sort,
             String stock,
             List<String> sizes,
-            @NotNull List<String> colors,
+            List<String> colors,
             int page,
             int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         List<Product> filteredProducts = productRepository.filterProducts(category, minPrice, maxPrice, discount, sort);
 
-        if(!colors.isEmpty()){
+        if(colors != null && !colors.isEmpty()){
             filteredProducts=filteredProducts.stream().filter(p->colors.stream().anyMatch(c->c.equalsIgnoreCase(p.getColor()))).collect(Collectors.toList());
         }
         if(stock!=null){

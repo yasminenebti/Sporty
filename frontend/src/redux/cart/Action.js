@@ -17,27 +17,29 @@ export const getCart = (token) => async (dispatch) => {
         const currentCart = res.data;
 
         dispatch({ type: GET_CART_SUCCESS, payload: currentCart });
-        console.log(currentCart)
+        //console.log("current cart",currentCart)
     } catch (error) {
         dispatch({ type: GET_CART_ERROR, payload: error.message });
 
     }
 }
 
-export const addItemToCart = (data) => async (dispatch) => {
+export const addItemToCart = (data,token) => async (dispatch) => {
+
 
     dispatch({ type: ADD_ITEM_CART_REQ });
     try {
         const res = await axios.put(`${BASE_URL}/api/v1/cart`, data ,{
             headers: {
                 "Content-Type": "application/json",
+                "Authorization" : `Bearer ${token}`
             }
         });
 
         const cartItem = res.data;
 
         dispatch({ type: ADD_ITEM_CART_SUCCESS, payload: cartItem });
-        console.log(cartItem)
+        console.log("add item to cart",cartItem)
     } catch (error) {
         dispatch({ type: ADD_ITEM_CART_ERROR, payload: error.message });
 

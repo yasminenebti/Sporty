@@ -43,7 +43,7 @@ export const findProducts = (data) => async (dispatch) => {
         const products = res.data;
 
         dispatch({ type: FIND_PRODUCTS_SUCCESS, payload: products });
-        console.log(products)
+        //console.log("products",products)
     } catch (error) {
         dispatch({ type: FIND_PRODUCTS_ERROR, payload: error.message });
 
@@ -64,7 +64,7 @@ export const findSingleProduct = (productId) => async (dispatch) => {
         const product = res.data;
 
         dispatch({ type: FIND_PRODUCT_SUCCESS, payload: product });
-        console.log(product)
+        //console.log("product ",product)
     } catch (error) {
         dispatch({ type: FIND_PRODUCT_ERROR, payload: error.message });
 

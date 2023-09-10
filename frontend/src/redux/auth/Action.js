@@ -40,7 +40,7 @@ export const login = (data) => async (dispatch) => {
         if (user.token) {
             localStorage.setItem("token", user.token);
         }
-        console.log(user)
+        //console.log(user)
 
         dispatch({ type: LOGIN_SUCCESS, payload: user });
         console.log(user.token)
@@ -63,7 +63,7 @@ export const currentUser = (token) => async (dispatch) => {
       
       const currentUser = response.data;
       dispatch({type:REQ_USER_SUCCESS , payload:currentUser})
-      console.log(currentUser)
+      //console.log(currentUser)
     
     } catch (error) {
       dispatch({ type: REQ_USER_ERROR, payload: error.message });

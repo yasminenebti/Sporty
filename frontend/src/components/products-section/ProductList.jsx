@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import {
@@ -13,30 +13,24 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
+  Pagination,
   Radio,
   RadioGroup,
 } from "@mui/material";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { findProducts } from "../../redux/products/Action";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 const sortOptions = [
-  { name: "Most Popular", href: "#", current: true },
-  { name: "Best Rating", href: "#", current: false },
-  { name: "Newest", href: "#", current: false },
-  { name: "Price: Low to High", href: "#", current: false },
-  { name: "Price: High to Low", href: "#", current: false },
+  { name: "Price: priceLowToHigh", current: false },
+  { name: "Price: priceHighToLow", current: false },
 ];
-const subCategories = [
-  { name: "Totes", href: "#" },
-  { name: "Backpacks", href: "#" },
-  { name: "Travel Bags", href: "#" },
-  { name: "Hip Bags", href: "#" },
-  { name: "Laptop Sleeves", href: "#" },
-];
-const filters = [
+
+const checkBoxFilters = [
   {
     id: "color",
     name: "Color",
@@ -47,19 +41,22 @@ const filters = [
       { value: "brown", label: "Brown" },
       { value: "green", label: "Green" },
       { value: "purple", label: "Purple" },
+      { value: "GrEy", label: "Grey" },
+
     ],
   },
   {
-    id: "category",
-    name: "Category",
+    id: "size",
+    name: "Size",
     options: [
-      { value: "new-arrivals", label: "New Arrivals" },
-      { value: "sale", label: "Sale" },
-      { value: "travel", label: "Travel" },
-      { value: "organization", label: "Organization" },
-      { value: "accessories", label: "Accessories" },
+      { value: "S", label: "S" },
+      { value: "M", label: "M" },
+      { value: "L", label: "L" },
     ],
   },
+];
+
+const radioFilters = [
   {
     id: "discount",
     name: "discount",
@@ -70,14 +67,42 @@ const filters = [
       { value: "70", label: "70% and above" },
     ],
   },
-];
+  {
+    id: "price",
+    name: "price",
+    options: [
+      { value: "10-100", label: "10$ to 100$" },
+      { value: "100-200", label: "100$ to 200$" },
+      { value: "200-300", label: "200$ to 300$" },
+      { value: "300-400", label: "300$ to 400$" },
+      { value: "400-500", label: "400$ to 500$" },
+      { value: "600-5000", label: "600$ to 5000$" },
 
+    ],
+    
+  },
+  {
+    id: "stock",
+    name: "Availibility",
+    options: [
+      { value: "in_stock", label: "In Stock" },
+      { value: "out_of_stock", label: "Out Of Stock" }
+    ],
+    
+  },
+];
 
 
 export default function ProductList() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const param = useParams()
+
+  const product = useSelector((state)=>state.product)
+  console.log(product.products.totalPages)
+  
 
   const handleCheckBoxFilter = (value, sectionId) => {
     const searchParams = new URLSearchParams(location.search);
@@ -87,7 +112,10 @@ export default function ProductList() {
       search = search[0].split(",").filter((item) => item !== value);
       if (search.length === 0) {
         searchParams.delete(sectionId);
+        console.log("params deleted")
       }
+      console.log("includes" , value , sectionId , search)
+
     } else {
       search.push(value);
     }
@@ -100,11 +128,54 @@ export default function ProductList() {
   };
 
   const handleRadioFilter = (section, sectionId) => {
+    
     const searchParams = new URLSearchParams(location.search);
     searchParams.set(sectionId,section.target.value);
     const query = searchParams.toString();
     navigate({ search: `?${query}` });
   };
+
+  const handlePagination = (e,value) => {
+    const searchParams = new URLSearchParams(location.search)
+    searchParams.set("page",value)
+    const query = searchParams.toString()
+    navigate({search:`?${query}`})
+  }
+
+  const decodedQuery = decodeURIComponent(location.search)
+  const searchParams = new URLSearchParams(decodedQuery)
+  
+
+  const colorValue = searchParams.get("color")
+  const sizeValue = searchParams.get("size")
+  const priceValue = searchParams.get("price")
+  const discountValue = searchParams.get("discount")
+  const sortValue = searchParams.get("sort")
+  const pageNumber = searchParams.get("page") || 1
+  const stock = searchParams.get("stock")
+
+
+  useEffect(()=>{
+    const [minPrice,maxPrice] = priceValue ===null ? [0,10000] : priceValue.split("-").map(Number)
+
+    const data = {
+      category : param.levelThree,
+      colors : colorValue || [],
+      sizes : sizeValue | [],
+      minPrice,
+      maxPrice,
+      discount : discountValue || 0,
+      sort : sortValue || "priceLowToHigh",
+      page : pageNumber - 1,
+      pageSize : 1,
+      stock : stock || ""
+
+
+    }
+    console.log(data)
+    dispatch(findProducts(data))
+  },[colorValue, discountValue, dispatch, pageNumber, param.levelThree, priceValue, sizeValue, sortValue, stock])
+
 
   return (
     <div className="bg-white">
@@ -155,24 +226,12 @@ export default function ProductList() {
 
                   {/* Filters */}
                   <form className="mt-4 border-t border-gray-200">
-                    <h3 className="sr-only">Categories</h3>
-                    <ul
-                      role="list"
-                      className="px-2 py-3 font-medium text-gray-900"
-                    >
-                      {subCategories.map((category) => (
-                        <li key={category.name}>
-                          <a href={category.href} className="block px-2 py-3">
-                            {category.name}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
+                  
 
-                    {filters.map((section) => (
+                    {checkBoxFilters.map((section,index) => (
                       <Disclosure
                         as="div"
-                        key={section.id}
+                        key={index}
                         className="border-t border-gray-200 px-4 py-6"
                       >
                         {({ open }) => (
@@ -311,23 +370,11 @@ export default function ProductList() {
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
               {/* *********************************All the filter are here************************************************* */}
               <form className="hidden lg:block">
-                {/* deleted from here  */}
-                <h3 className="sr-only">Categories</h3>
-                <ul
-                  role="list"
-                  className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
-                >
-                  {subCategories.map((category) => (
-                    <li key={category.name}>
-                      <a href={category.href}>{category.name}</a>
-                    </li>
-                  ))}
-                </ul>
-                {/* to here  */}
+                
 
                 {/* checkbox */}
 
-                {filters.map((section) => (
+                {checkBoxFilters.map((section) => (
                   <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
                     {({ open }) => (
                           <>
@@ -378,7 +425,7 @@ export default function ProductList() {
 
                 {/* Radio */}
 
-                {filters.map((section) => (
+                {radioFilters.map((section) => (
                   <Disclosure
                     as="div"
                     key={section.id}
@@ -441,12 +488,20 @@ export default function ProductList() {
               {/* Product grid */}
               <div className="lg:col-span-4 w-full">
                 <div className="flex flex-wrap justify-center py-5">
-                  {[1, 1, 1, 1, 1, 1,1,1,1,1,1,1,1,1,1,1,1].map((item, key) => (
+                  {product?.products?.content?.map((item, key) => (
                     <ProductCard key={key} product={item} />
                   ))}
                 </div>
               </div>
             </div>
+          </section>
+
+          <section className="w-full px=[3.6rem]">
+            <div className="px-4 py-5 flex justify-center">
+            <Pagination count={product?.products?.totalPages} color="primary" onChange={handlePagination} />
+            </div>
+         
+
           </section>
         </main>
       </div>

@@ -1,10 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import { RadioGroup } from '@headlessui/react'
 import { Box, Grid, LinearProgress, Rating } from '@mui/material'
 import ReviewCard from './ReviewCard'
 import ProductCard from './ProductCard'
-import { useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+import { findSingleProduct } from '../../redux/products/Action'
+import { addItemToCart } from '../../redux/cart/Action'
 
 const product = {
   name: 'Basic Tee 6-Pack',
@@ -66,9 +69,27 @@ export default function ProductOverview() {
   const navigate = useNavigate()
   const [selectedColor, setSelectedColor] = useState(product.colors[0])
   const [selectedSize, setSelectedSize] = useState(product.sizes[2])
+  const dispatch = useDispatch()
+  const productState = useSelector((state) => state.product)
+  console.log(productState.product)
+  const currentProduct = productState?.product
+  console.log(currentProduct)
+  const params = useParams()
+  const token = localStorage.getItem("token")
+
+  const handleNavigateCart = () => {
+    const data = { productId: parseInt(params.id, 10) }; // Parse the string to an integer
+    console.log(data);
+    dispatch(addItemToCart(data,token))
+    navigate("/cart")
+  }
+
+  useEffect(()=>{
+    dispatch(findSingleProduct(params.id))
+  },[dispatch, params.id])
 
   return (
-    <div className="bg-white lg:px-20">
+    <div className="bg-white pt-24 lg:px-20">
       <div className="pt-6">
         <nav aria-label="Breadcrumb">
           <ol role="list" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -104,8 +125,8 @@ export default function ProductOverview() {
         <div className="flex flex-col items-center">
           <div className="overflow-hidden rounded-lg max-w-[30rem] max-h-[35rem]">
             <img
-              src={product.images[0].src}
-              alt={product.images[0].alt}
+              src={currentProduct?.image}
+              alt={""}
               className="h-full w-full object-cover object-center"
             />
           </div>
@@ -130,17 +151,16 @@ export default function ProductOverview() {
         {/* Product info */}
         <div className="lg:col-span-1 max-auto max-w-2xl px-4 pb-16 sm:px-6 lg:max-w-7xl lg:px-8 lg:pb-24">
           <div className="lg:col-span-2">
-            <h1 className="text-lg lg:text-xl font-semi-bold text-primary font-black">{product.name}</h1>
-            <h1 className=' text-lg lg:text-xl pt-1 italic'>universal</h1>
+            <h1 className="text-lg lg:text-xl font-semi-bold text-primary font-black">{currentProduct?.name}</h1>
           </div>
 
           {/* Options */}
           <div className="mt-4 lg:row-span-3 lg:mt-0">
-            <h2 className="sr-only">Product information</h2>
+            <h2 className="sr-only">{currentProduct?.description}</h2>
             <p className="flex space-x-5 items-center text-lg lg:text-xl">
-            <p className="font-semibold">100$</p>
-            <p className=" line-through opacity-50">100$</p>
-            <p className=" text-secondary font-semibold">100$</p>
+            <p className="font-semibold">{currentProduct?.discountedPrice}</p>
+            <p className=" line-through opacity-50">{currentProduct?.price}</p>
+            <p className=" text-secondary font-semibold pl-10">{currentProduct?.discount}% Off</p>
             </p>
 
             {/* Reviews */}
@@ -215,7 +235,7 @@ export default function ProductOverview() {
               </div>
 
               <button
-                onClick={() => navigate("/cart")}
+                onClick={handleNavigateCart}
                 type="submit"
                 className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-blue px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
@@ -359,12 +379,12 @@ export default function ProductOverview() {
 
         {/* Similar products */}
 
-        <section className='pt-10'>
+        {/* <section className='pt-10'>
           <h1 className='text-xl py-5 font-bold'>Similar products</h1>
             <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4'>
               {[1,1,1,1,1,1,1,1,1,1,1,1].map((item , key) => <ProductCard key={key}/>)}
             </div>            
-        </section>
+        </section> */}
       </div>
     </div>
   )

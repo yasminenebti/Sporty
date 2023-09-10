@@ -9,7 +9,7 @@ const Home = () => {
         <div >
           <ProductsCarousel className="products-carousel" data={"data"} sectionName={"nutrition"} />
         </div>
-        <div><ProductCard/></div>
+        {/* <div><ProductCard/></div> */}
         <div>others</div>
         <div>others</div>
         <div>others</div>
