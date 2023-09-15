@@ -47,9 +47,12 @@ public class CartService {
 
     public CartItemRequest updateCartItem(Long cartItemId , CartItem cartItem) throws CartException {
         CartItem cartItemToUpdate = findCartItemById(cartItemId);
+
         cartItemToUpdate.setQuantity(cartItem.getQuantity());
-        cartItemToUpdate.setPrice(cartItem.getProduct().getDiscountedPrice() * cartItem.getProduct().getQuantity());
-        cartItemToUpdate.setPriceAfterDiscount(cartItem.getProduct().getDiscountedPrice() * cartItem.getProduct().getQuantity());
+
+        cartItemToUpdate.setPrice(cartItemToUpdate.getProduct().getPrice() * cartItemToUpdate.getQuantity());
+        cartItemToUpdate.setPriceAfterDiscount(cartItemToUpdate.getProduct().getDiscountedPrice() * cartItemToUpdate.getQuantity());
+        cartItemRepository.save(cartItemToUpdate);
         return mapToCartItemDTO(cartItemToUpdate);
     }
 
@@ -75,6 +78,7 @@ public class CartService {
                 .discount(cartItem.getProduct().getDiscount())
                 .quantity(cartItem.getQuantity())
                 .price(cartItem.getPrice())
+                .size(cartItem.getSize())
                 .priceAfterDiscount(cartItem.getPriceAfterDiscount())
                 .userId(cartItem.getUserId())
                 .build();
@@ -172,6 +176,8 @@ public class CartService {
                 .discount(cart.getDiscount())
                 .build();
     }
+
+
 
 
 

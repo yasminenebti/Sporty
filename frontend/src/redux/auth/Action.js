@@ -51,7 +51,9 @@ export const login = (data) => async (dispatch) => {
 }
 
 
-export const currentUser = (token) => async (dispatch) => {
+export const currentUser = () => async (dispatch) => {
+    const token = localStorage.getItem("token") 
+
     dispatch({ type: REQ_USER });
     try {
       const response = await axios.get(`${BASE_URL}/api/v1/auth/currentUser` , {

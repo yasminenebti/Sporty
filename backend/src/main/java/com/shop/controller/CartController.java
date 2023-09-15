@@ -1,6 +1,7 @@
 package com.shop.controller;
 
 import com.shop.dto.cart.AddRequest;
+import com.shop.entity.cart.CartItem;
 import com.shop.entity.product.Product;
 import com.shop.exception.CartException;
 import com.shop.exception.ProductException;
@@ -32,6 +33,10 @@ public class CartController {
     @DeleteMapping("/{cartItemId}")
     public ResponseEntity<?> deleteItemFromCart(@PathVariable Long cartItemId) throws CartException {
         return ResponseEntity.ok(cartService.removeCartItem(cartItemId));
+    }
+    @PutMapping("/{cartItemId}")
+    public ResponseEntity<?> deleteItemFromCart(@PathVariable Long cartItemId , @RequestBody CartItem cartItem) throws CartException {
+        return ResponseEntity.ok(cartService.updateCartItem(cartItemId,cartItem));
     }
 
 }

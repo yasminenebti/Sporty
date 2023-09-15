@@ -1,28 +1,28 @@
-package com.shop.dto.cart;
+package com.shop.dto.order;
 
-import lombok.AllArgsConstructor;
+
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Data
-public class CartItemRequest {
+public class OrderItemRequest {
     private Long id;
-    private Long cartId;
     private Long productId;
     private String productName;
-    private String productImage;
-    private List<String> productSize;
     private Integer quantity;
-    private Integer discount;
+    private String productImage;
+
+    private List<String> productSize;
     private String size;
+
     private float price;
     private float priceAfterDiscount;
+    private Integer discount;
     private Long userId;
+
+    private LocalDateTime deliveryAt;
 }

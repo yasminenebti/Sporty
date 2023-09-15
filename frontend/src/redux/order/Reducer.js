@@ -14,7 +14,7 @@ export const orderReducer = (state = initialState, action) => {
         case GET_ORDER_REQUEST:
             return { ...state, isLoading: true , error : null };
         case GET_ORDER_SUCCESS:
-            return { ...state, order: action.payload , isLoading : false , error : null };
+            return { ...state, order: action.payload , orders:action.payload.orderItems ,isLoading : false , error : null };
         case CREATE_ORDER_SUCCESS:
             return { ...state, order: action.payload , isLoading : false , error : null };
         case CREATE_ORDER_ERROR:

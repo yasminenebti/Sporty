@@ -92,7 +92,6 @@ function classNames(...classes) {
 
 export default function Navigation() {
   const navigate = useNavigate()
-  const token = localStorage.getItem("token") 
   const dispatch = useDispatch()
   const authState = useSelector((state) => state.authState);
 
@@ -129,10 +128,10 @@ export default function Navigation() {
   }
 
   useEffect(() => {
-    if(token)
-    dispatch(currentUser(token))
+   
+    dispatch(currentUser())
   
-  },[token, dispatch, navigate])
+  },[ dispatch, navigate])
 
 
   return (
@@ -261,17 +260,7 @@ export default function Navigation() {
                   </div>
                 </div>
 
-                <div className="border-t border-grey px-4 py-6">
-                  <a href="#" className="-m-2 flex items-center p-2">
-                    <img
-                      src="https://tailwindui.com/img/flags/flag-canada.svg"
-                      alt=""
-                      className="block h-auto w-5 flex-shrink-0"
-                    />
-                    <span className="ml-3 block text-base font-medium text-gray-900">CAD</span>
-                    <span className="sr-only">, change currency</span>
-                  </a>
-                </div>
+                
               </Dialog.Panel>
             </Transition.Child>
           </div>

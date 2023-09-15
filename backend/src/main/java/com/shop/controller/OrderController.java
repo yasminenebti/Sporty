@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
     private final OrderService orderService;
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<?> createOrder(@RequestBody Address address) throws CartException, UserException {
         return ResponseEntity.ok(orderService.createOrder(address));
     }

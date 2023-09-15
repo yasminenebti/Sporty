@@ -38,7 +38,8 @@ public class SecurityConfig {
                                 "/api/v1/auth/**",
                                 "/api/v1/category/**",
                                 "/api/v1/product/**",
-                                "/api/v1/cart/**"
+                                "/api/v1/cart/**",
+                                "/api/v1/order/**"
                         ).permitAll().anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider) //configured the authentication provider
                 .addFilterBefore(jwtAuthFilter , UsernamePasswordAuthenticationFilter.class);

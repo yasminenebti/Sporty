@@ -1,6 +1,9 @@
 package com.shop.services;
 
+import com.shop.dto.cart.CartItemRequest;
 import com.shop.dto.cart.CartRequest;
+import com.shop.dto.order.OrderItemRequest;
+import com.shop.dto.order.OrderRequest;
 import com.shop.dto.user.UserRequest;
 import com.shop.entity.Address;
 import com.shop.entity.cart.Cart;
@@ -20,9 +23,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,12 +36,15 @@ public class OrderService {
     private final AuthService authService;
     private final AddressRepository addressRepository;
     private final CartService cartService;
+    //private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
 
-    public OrderItem createOrderItem(OrderItem orderItem){
-        return orderItemRepository.save(orderItem);
+
+
+    public OrderItemRequest createOrderItem(OrderItem orderItem){
+        return mapToOrderItemDTO(orderItemRepository.save(orderItem));
     }
 
-    public Order createOrder(Address shipAddress) throws UserException, CartException {
+    public OrderRequest createOrder(Address shipAddress) throws UserException, CartException {
         UserRequest currentUser = authService.getCurrentUser();
         User orderUser = authService.getUserById(currentUser.id());
         shipAddress.setUser(orderUser);
@@ -77,58 +83,58 @@ public class OrderService {
                 .createdAt(LocalDateTime.now())
                 .orderStatus(OrderStatus.PENDING)
                 .build();
-        orderRepository.save(order);
-
-        //.paymentdetails().setStatus("pending")
+        Order saved = orderRepository.save(order);
 
         for (OrderItem item : orderItems){
             item.setOrder(order);
             orderItemRepository.save(item);
         }
-        return order;
-
-
-
+        return mapToOrderDto(saved);
     }
 
-    public Order getOrderById(Long orderId) throws OrderException {
+    public OrderRequest getOrderById(Long orderId) throws OrderException {
         Optional<Order> order = orderRepository.findById(orderId);
         if (order.isPresent()){
-            return order.get();
+            return mapToOrderDto(order.get());
         }
         else throw new OrderException("Cart not found");
     }
 
-    public Order placeOrder(Long orderId) throws OrderException {
-        Order order = getOrderById(orderId);
-        order.setOrderStatus(OrderStatus.PLACED);
+    public OrderRequest placeOrder(Long orderId) throws OrderException {
+        OrderRequest order = getOrderById(orderId);
+        Order orderPlaced = orderRepository.findById(order.getId()).orElseThrow(() -> new RuntimeException("Cart not found"));
+        orderPlaced.setOrderStatus(OrderStatus.PLACED);
+        orderRepository.save(orderPlaced);
         //getPaymeDetais.setStatus.completed
-        return order;
+        return mapToOrderDto(orderPlaced);
     }
-    public Order confirmOrder(Long orderId) throws OrderException {
-        Order order = getOrderById(orderId);
-        order.setOrderStatus(OrderStatus.CONFIRMED);
-
-        return orderRepository.save(order);
+    public OrderRequest confirmOrder(Long orderId) throws OrderException {
+        OrderRequest order = getOrderById(orderId);
+        Order orderPlaced = orderRepository.findById(order.getId()).orElseThrow(() -> new RuntimeException("Cart not found"));
+        orderPlaced.setOrderStatus(OrderStatus.CONFIRMED);
+        orderRepository.save(orderPlaced);
+        return mapToOrderDto(orderPlaced);
     }
-    public Order shipOrder(Long orderId) throws OrderException {
-        Order order = getOrderById(orderId);
-        order.setOrderStatus(OrderStatus.SHIPPED);
-
-        return orderRepository.save(order);
+    public OrderRequest shipOrder(Long orderId) throws OrderException {
+        OrderRequest order = getOrderById(orderId);
+        Order orderPlaced = orderRepository.findById(order.getId()).orElseThrow(() -> new RuntimeException("Cart not found"));
+        orderPlaced.setOrderStatus(OrderStatus.SHIPPED);
+        return mapToOrderDto(orderPlaced);
     }
-    public Order deliverOrder(Long orderId) throws OrderException {
-        Order order = getOrderById(orderId);
-        order.setOrderStatus(OrderStatus.DELIVERED);
-
-        return orderRepository.save(order);
+    public OrderRequest deliverOrder(Long orderId) throws OrderException {
+        OrderRequest order = getOrderById(orderId);
+        Order orderPlaced = orderRepository.findById(order.getId()).orElseThrow(() -> new RuntimeException("Cart not found"));
+        orderPlaced.setOrderStatus(OrderStatus.DELIVERED);
+        orderRepository.save(orderPlaced);
+        return mapToOrderDto(orderPlaced);
     }
 
-    public Order cancelOrder(Long orderId) throws OrderException {
-        Order order = getOrderById(orderId);
-        order.setOrderStatus(OrderStatus.CANCELED);
-
-        return orderRepository.save(order);
+    public OrderRequest cancelOrder(Long orderId) throws OrderException {
+        OrderRequest order = getOrderById(orderId);
+        Order orderPlaced = orderRepository.findById(order.getId()).orElseThrow(() -> new RuntimeException("Cart not found"));
+        orderPlaced.setOrderStatus(OrderStatus.CANCELED);
+        orderRepository.save(orderPlaced);
+        return mapToOrderDto(orderPlaced);
     }
 
     public List<Order> historyOrders(Long userId){
@@ -138,9 +144,54 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public void deleteOrder(Long orderId) throws OrderException {
-        Order order = getOrderById(orderId);
+    public void deleteOrder(Long orderId) {
 
         orderRepository.deleteById(orderId);
     }
+
+
+    private OrderItemRequest mapToOrderItemDTO(OrderItem orderItem) {
+        return OrderItemRequest
+                .builder()
+                .id(orderItem.getId())
+                .productId(orderItem.getProduct().getId())
+                .productName(orderItem.getProduct().getName())
+                .productImage(orderItem.getProduct().getImage())
+                .quantity(orderItem.getQuantity())
+                .discount(orderItem.getProduct().getDiscount())
+                .price(orderItem.getPrice())
+                .size(orderItem.getSize())
+                .priceAfterDiscount(orderItem.getPriceAfterDiscount())
+                .userId(orderItem.getUserId())
+                .deliveryAt(orderItem.getDeliveryAt())
+                .build();
+    }
+
+    private OrderRequest mapToOrderDto(Order order) {
+        DateTimeFormatter customFormatter = DateTimeFormatter.ofPattern("d'st' MMMM yyyy 'at' h:mm a", Locale.ENGLISH);
+
+        String formattedCreatedAt = order.getCreatedAt().format(customFormatter);
+
+
+        return OrderRequest.builder()
+                .id(order.getId())
+                .userId(order.getUser().getId())
+                .orderDate(order.getOrderDate())
+                .deliveryDate(order.getDeliveryDate())
+                .orderItems(order.getOrderItems().stream().map(this::mapToOrderItemDTO).collect(Collectors.toList())) // Set the list of mapped OrderItemRequests
+                .addressShippingCity(order.getAddressShipping().getCity())
+                .addressShippingState(order.getAddressShipping().getState())
+                .addressShippingStreet(order.getAddressShipping().getStreet())
+                .addressShippingZipCode(order.getAddressShipping().getZipCode())
+                .totalPrice(order.getTotalPrice())
+                .totalPriceDiscounted(order.getTotalPriceDiscounted())
+                .priceAfterDiscount(order.getPriceAfterDiscount())
+                .discount(order.getDiscount())
+                .orderStatus(order.getOrderStatus().toString())
+                .totalItems(order.getTotalItems())
+                .createdAt(formattedCreatedAt)
+                .build();
+    }
+
+
 }

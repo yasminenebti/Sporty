@@ -2,14 +2,18 @@ import { Box, Button, Grid, TextField } from "@mui/material"
 import { useState } from "react";
 import AddressCard from "./AddressCard";
 import "./Scrollbar.css"
+import { useNavigate } from "react-router";
+import { createOrder } from "../../redux/order/Action";
+import { useDispatch } from "react-redux";
 
 const DeliveryAddress = () => {
+    const dispatch = useDispatch()
     const [data, setData] = useState({firstName:"" , lastName : "" , street:"" , city:"" , state:"" , phone:"" , zipCode:"" });
-
+    const navigate = useNavigate()
     const handleSubmit=(e) => {
-        console.log(data)
         e.preventDefault()
-        console.log("data")
+        dispatch(createOrder(data,navigate))
+
     }
     const handleChange = (e) => {
         const { name, value } = e.target;

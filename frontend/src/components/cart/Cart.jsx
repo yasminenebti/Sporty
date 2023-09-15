@@ -6,26 +6,24 @@ import { getCart } from "../../redux/cart/Action";
 import { useEffect } from "react";
 
 const Cart = () => {
-  const token = localStorage.getItem("token")
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const cartState = useSelector((state) => state.cart)
   const currentCart = cartState?.cart
-  console.log(currentCart)
   const handleNavigateCheckout = () => {
    
     navigate("/checkout?step=1")
   }
 
   useEffect(()=>{
-    dispatch(getCart(token))
-  },[dispatch, token])
+    dispatch(getCart())
+  },[cartState.delete,cartState.update])
   
   return (
     <div className=" pt-28">
       <div className=" lg:grid grid-cols-3 lg:px-16 relative">
         <div className="col-span-2 ">
-          {currentCart?.cartItems.map((item , key) => <CartItem cartItem={item} key={key}/>)}
+          {currentCart?.cartItems.map((item , key) => <CartItem item={item} key={key}/>)}
         </div>
 
         <div className="px-5 sticky top-0 h-[100vh] mt-5 lg:mt-0">

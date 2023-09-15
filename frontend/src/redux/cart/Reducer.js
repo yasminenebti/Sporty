@@ -20,9 +20,9 @@ export const cartReducer = (state = initialState, action) => {
         case GET_CART_SUCCESS:
             return { ...state, cart: action.payload, cartItems : action.payload.cartItems , isLoading : false , error : null };
         case REMOVE_ITEM_CART_SUCCESS:
-            return { ...state, cart: action.payload, cartItems : action.payload.cartItems , isLoading : false , error : null };
+            return { ...state, delete : action.payload , isLoading : false , error : null };
         case UPDATE_ITEM_CART_SUCCESS:
-            return { ...state, cart: action.payload, cartItems : action.payload.cartItems , isLoading : false , error : null };
+            return { ...state,  update : action.payload , isLoading : false , error : null };
         case GET_CART_ERROR:
         case UPDATE_ITEM_CART_ERROR:
         case REMOVE_ITEM_CART_ERROR:
