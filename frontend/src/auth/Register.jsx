@@ -9,7 +9,7 @@ export default function Register() {
   const [data, setData] = useState({username : "" , firstName : "" , lastName : "" , email:"" , password : ""});
   const dispatch = useDispatch()
   const authState = useSelector((state) => state.authState);
-  const showToast = useToast(); // Access the showToast function
+  const showToast = useToast(); 
 
   
 

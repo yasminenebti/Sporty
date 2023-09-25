@@ -49,6 +49,8 @@ public class User implements UserDetails {
     @CollectionTable(name = "payment_info",joinColumns = @JoinColumn(name = "userId"))
     private List<PaymentInfo> paymentInfo = new ArrayList<>();
 
+    private String paymentId;
+
     @OneToMany(mappedBy = "user")
     private List<Rating> rating = new ArrayList<>();
 

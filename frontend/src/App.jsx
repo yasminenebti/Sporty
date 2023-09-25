@@ -2,15 +2,15 @@
 import Footer from "./components/Footer"
 import Navigation from "./components/Navigation"
 import Home from "./pages/Home"
-import ProductList from './components/products-section/ProductList'
+import ProductList from './pages/products-section/ProductList'
 import { Route, Routes } from "react-router"
-import ProductOverview from "./components/products-section/ProductOverview"
-import Cart from "./components/cart/Cart"
-import Checkout from "./components/checkout/Checkout"
+import ProductOverview from "./pages/products-section/ProductOverview"
+import Cart from "./pages/cart/Cart"
+import Checkout from "./pages/checkout/Checkout"
 import Login from "./auth/Login"
 import Register from "./auth/Register"
-import Order from "./components/Order/Order"
-import OrderDetails from "./components/Order/OrderDetails"
+import Order from "./pages/Order/Order"
+import OrderDetails from "./pages/Order/OrderDetails"
 
 
 function App() {

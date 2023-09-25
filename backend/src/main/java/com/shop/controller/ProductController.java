@@ -43,6 +43,11 @@ public class ProductController {
         return ResponseEntity.ok(productService.getFilteredProducts(category, minPrice, maxPrice, discount, sort, stock, sizes, colors, page, pageSize));
     }
 
+    @GetMapping("/recent")
+    public ResponseEntity<?> getRecentProducts() {
+        return ResponseEntity.ok(productService.recentProducts());
+    }
+
 
     @GetMapping("/{productId}")
     public ResponseEntity<?> findProductById(@PathVariable Long productId) throws ProductException {

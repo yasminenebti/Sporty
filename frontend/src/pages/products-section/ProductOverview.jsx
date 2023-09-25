@@ -69,6 +69,7 @@ export default function ProductOverview() {
   const dispatch = useDispatch()
   const productState = useSelector((state) => state.product)
   const currentProduct = productState?.product
+  console.log(currentProduct)
   const params = useParams()
 
   const handleNavigateCart = () => {
@@ -125,20 +126,7 @@ export default function ProductOverview() {
             />
           </div>
 
-          <div className="flex flex-wrap space-x-5 justify-center">
-            {[1,1,1,1,1].map((item , key) =>
-                <>
-                <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg max-w-[5rem] max-h-[5rem] mt-4">
-            <img
-              src={product.images[1].src}
-              alt={product.images[1].alt}
-              className="h-full w-full object-cover object-center"
-            />
-          </div>
-                </>
-             )}
-           
-          </div>
+          
          
         </div>
 
@@ -151,18 +139,18 @@ export default function ProductOverview() {
           {/* Options */}
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <h2 className="sr-only">{currentProduct?.description}</h2>
-            <p className="flex space-x-5 items-center text-lg lg:text-xl">
-            <p className="font-semibold">{currentProduct?.discountedPrice}</p>
-            <p className=" line-through opacity-50">{currentProduct?.price}</p>
-            <p className=" text-secondary font-semibold pl-10">{currentProduct?.discount}% Off</p>
-            </p>
+            <div className="flex space-x-5 items-center text-lg lg:text-xl">
+            <div className="font-semibold">{currentProduct?.discountedPrice}</div>
+            <div className=" line-through opacity-50">{currentProduct?.price}</div>
+            <div className=" text-secondary font-semibold pl-10">{currentProduct?.discount}% Off</div>
+            </div>
 
             {/* Reviews */}
             <div className="mt-6">
               <div className='flex items-center space-x-3'>
               <Rating name='read-only' value={3.5} readOnly/>
-              <p className='opacity-50 text-sm'>1000 ratings</p>
-              <p className='ml-3 text-sm font-semibold text-blue '>1000 review</p>
+              <div className='opacity-50 text-sm'>1000 ratings</div>
+              <div className='ml-3 text-sm font-semibold text-blue '>1000 review</div>
               </div>
             </div>
 
@@ -182,9 +170,9 @@ export default function ProductOverview() {
              
                 <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-4">
                <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
-                 {currentProduct?.sizes.map((size) => (
+                 {currentProduct?.sizes.map((size,index) => (
                    <RadioGroup.Option
-                     key={size.name}
+                     key={index}
                      value={size.name}
                      className={({ active }) =>
                        classNames(
@@ -249,7 +237,7 @@ export default function ProductOverview() {
               <h3 className="sr-only">Description</h3>
 
               <div className="space-y-6">
-                <p className="text-base text-gray-900">{currentProduct?.description}</p>
+                <div className="text-base text-gray-900">{currentProduct?.description}</div>
               </div>
             </div>
             
@@ -276,14 +264,14 @@ export default function ProductOverview() {
 
                    <div className='flex items-center space-x-3'>
                       <Rating value={4.6} precision={.5} readOnly></Rating>
-                      <p className='opacity-60'>58437</p>
+                      <div className='opacity-60'>58437</div>
                    </div>
 
                    <Box className="mt-5">
                     {/* 5 */}
                      <Grid container  justifyContent={"center"} alignItems={"center"}>
                         <Grid item xs={1}>
-                          <p className=' font-bold text-lg'>5</p>
+                          <div className=' font-bold text-lg'>5</div>
                         </Grid>
                         
                         <Grid item xs={7}>
@@ -297,7 +285,7 @@ export default function ProductOverview() {
 
                      <Grid container  justifyContent={"center"} alignItems={"center"}>
                         <Grid item xs={1}>
-                          <p className=' font-bold text-lg'>4</p>
+                          <div className=' font-bold text-lg'>4</div>
                         </Grid>
                         
                         <Grid item xs={7}>
@@ -311,7 +299,7 @@ export default function ProductOverview() {
 
                      <Grid container  justifyContent={"center"} alignItems={"center"}>
                         <Grid item xs={1}>
-                          <p className=' font-bold text-lg'>3</p>
+                          <div className=' font-bold text-lg'>3</div>
                         </Grid>
                         
                         <Grid item xs={7}>
@@ -325,7 +313,7 @@ export default function ProductOverview() {
 
                      <Grid container  justifyContent={"center"} alignItems={"center"}>
                         <Grid item xs={1}>
-                          <p className=' font-bold text-lg'>2</p>
+                          <div className=' font-bold text-lg'>2</div>
                         </Grid>
                         
                         <Grid item xs={7}>
@@ -339,7 +327,7 @@ export default function ProductOverview() {
 
                      <Grid container  justifyContent={"center"} alignItems={"center"}>
                         <Grid item xs={1}>
-                          <p className=' font-bold text-lg'>1</p>
+                          <div className=' font-bold text-lg'>1</div>
                         </Grid>
                         
                         <Grid item xs={7}>

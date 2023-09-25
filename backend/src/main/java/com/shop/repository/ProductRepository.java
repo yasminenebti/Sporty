@@ -26,4 +26,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             @Param("discount") Integer discount,
             @Param("sort") String sort
     );
+
+    @Query("select p from Product p ORDER BY p.createdAt DESC LIMIT 10")
+    List<Product> recentProducts();
 }

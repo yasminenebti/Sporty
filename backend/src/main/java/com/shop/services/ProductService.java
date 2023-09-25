@@ -5,7 +5,6 @@ import com.shop.entity.product.Product;
 import com.shop.exception.ProductException;
 import com.shop.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -45,17 +44,7 @@ public class ProductService {
         else throw new ProductException("Product not found");
     }
 
-    public Page<Product> getFilteredProducts(
-            String category,
-            Float minPrice,
-            Float maxPrice,
-            Integer discount,
-            String sort,
-            String stock,
-            List<String> sizes,
-            List<String> colors,
-            int page,
-            int pageSize) {
+    public Page<Product> getFilteredProducts(String category, Float minPrice, Float maxPrice, Integer discount, String sort, String stock, List<String> sizes, List<String> colors, int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         List<Product> filteredProducts = productRepository.filterProducts(category, minPrice, maxPrice, discount, sort);
 
@@ -85,6 +74,10 @@ public class ProductService {
         } else {
             throw new ProductException("Product not found");
         }
+    }
+
+    public List<Product> recentProducts(){
+        return productRepository.recentProducts();
     }
 
     private ProductRequest mapToProductDto(Product product) {

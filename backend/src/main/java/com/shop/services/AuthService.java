@@ -212,20 +212,20 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid current password");
         }*/
 
-        if (userRequest.firstName() != null) {
-            userUpdate.setFirstName(userRequest.firstName());
+        if (userRequest.getFirstName() != null) {
+            userUpdate.setFirstName(userRequest.getFirstName());
         }
-        if (userRequest.lastName() != null) {
-            userUpdate.setLastName(userRequest.lastName());
+        if (userRequest.getLastName() != null) {
+            userUpdate.setLastName(userRequest.getLastName());
         }
-        if (userRequest.email() != null) {
-            if (userRepository.findByEmail(userRequest.email()).isPresent()) {
+        if (userRequest.getEmail() != null) {
+            if (userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
                 throw new IllegalArgumentException("Email already in use");
             }
-            userUpdate.setEmail(userRequest.email());
+            userUpdate.setEmail(userRequest.getEmail());
         }
-        if (userRequest.picture() != null) {
-            userUpdate.setPicture(userRequest.picture());
+        if (userRequest.getPicture() != null) {
+            userUpdate.setPicture(userRequest.getPicture());
         }
 
         userRepository.save(userUpdate);
@@ -249,15 +249,17 @@ public class AuthService {
     }
 
     private UserRequest mapToUserDto(User user) {
-        return new UserRequest(
-                user.getId(),
-                user.getUsername(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getPicture(),
-                user.isEnabled()
-        );
+        return  UserRequest
+                .builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .picture(user.getPicture())
+                .paymentId(user.getPaymentId())
+                .enabled(user.isEnabled())
+                .build();
 
     }
 

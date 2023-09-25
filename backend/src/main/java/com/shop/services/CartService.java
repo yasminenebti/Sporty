@@ -96,16 +96,16 @@ public class CartService {
 
     public CartRequest addItemsToCart(AddRequest itemsToAdd) throws ProductException, CartException {
         UserRequest currentUser = authService.getCurrentUser();
-        Cart cart = cartRepository.getCartByUser(currentUser.id());
+        Cart cart = cartRepository.getCartByUser(currentUser.getId());
         Product product = productService.findProductById(itemsToAdd.getProductId());
-        CartItem isItemPresent = cartItemRepository.isCartItemExist(cart,product,currentUser.id());
+        CartItem isItemPresent = cartItemRepository.isCartItemExist(cart,product,currentUser.getId());
         if(isItemPresent==null){
             CartItem cartItem = CartItem
                     .builder()
                     .product(product)
                     .cart(cart)
                     .quantity(itemsToAdd.getQuantity())
-                    .userId(currentUser.id())
+                    .userId(currentUser.getId())
                     .build();
 
             float price = itemsToAdd.getQuantity() * product.getPrice();
@@ -129,7 +129,7 @@ public class CartService {
 
     public CartRequest findCart(){
         UserRequest currentUser = authService.getCurrentUser();
-        Cart cart = cartRepository.getCartByUser(currentUser.id());
+        Cart cart = cartRepository.getCartByUser(currentUser.getId());
         float price = 0;
         float discountPrice = 0;
         int totalItems = 0;

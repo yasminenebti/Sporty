@@ -46,7 +46,7 @@ public class OrderService {
 
     public OrderRequest createOrder(Address shipAddress) throws UserException, CartException {
         UserRequest currentUser = authService.getCurrentUser();
-        User orderUser = authService.getUserById(currentUser.id());
+        User orderUser = authService.getUserById(currentUser.getId());
         shipAddress.setUser(orderUser);
         Address address = addressRepository.save(shipAddress);
         orderUser.getAddress().add(address);
