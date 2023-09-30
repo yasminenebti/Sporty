@@ -16,7 +16,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
 
-    @PostMapping("/{orderId}")
+    @GetMapping("/{orderId}")
     public ResponseEntity<?> createProduct(@PathVariable Long orderId) throws StripeException, OrderException{
         return ResponseEntity.ok(paymentService.createPayment(orderId));
     }

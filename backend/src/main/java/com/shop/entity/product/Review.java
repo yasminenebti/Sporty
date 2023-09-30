@@ -1,18 +1,17 @@
 package com.shop.entity.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shop.entity.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
 public class Review {
     @Id
@@ -22,10 +21,12 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name="product_id")
+    @JsonIgnore
     private Product product;
 
     @ManyToOne
     @JoinColumn(name="userId")
+    @JsonIgnore
     private User user;
 
     private LocalDateTime createdAt;

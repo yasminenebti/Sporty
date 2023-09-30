@@ -3,6 +3,7 @@ package com.shop.services;
 import com.shop.dto.cart.AddRequest;
 import com.shop.dto.cart.CartItemRequest;
 import com.shop.dto.cart.CartRequest;
+import com.shop.dto.product.ProductRequest;
 import com.shop.dto.user.UserRequest;
 import com.shop.entity.cart.Cart;
 import com.shop.entity.cart.CartItem;
@@ -98,6 +99,7 @@ public class CartService {
         UserRequest currentUser = authService.getCurrentUser();
         Cart cart = cartRepository.getCartByUser(currentUser.getId());
         Product product = productService.findProductById(itemsToAdd.getProductId());
+
         CartItem isItemPresent = cartItemRepository.isCartItemExist(cart,product,currentUser.getId());
         if(isItemPresent==null){
             CartItem cartItem = CartItem

@@ -6,6 +6,7 @@ import com.shop.exception.CategoryException;
 import com.shop.exception.OrderException;
 import com.shop.exception.UserException;
 import com.shop.services.OrderService;
+import com.stripe.exception.StripeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("")
-    public ResponseEntity<?> createOrder(@RequestBody Address address) throws CartException, UserException {
+    public ResponseEntity<?> createOrder(@RequestBody Address address) throws CartException, UserException, StripeException {
         return ResponseEntity.ok(orderService.createOrder(address));
     }
 

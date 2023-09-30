@@ -53,12 +53,6 @@ public class PaymentService {
         currentUser.setPaymentId(customer.getId());
 
 
-        Product.create(new ProductCreateParams.Builder()
-                .setId(orderId.toString())
-                .setName("order from sporty")
-                .setType(ProductCreateParams.Type.GOOD)
-                .build());
-
 
         //create Price
         Map<String, Object> priceParams = new HashMap<>();

@@ -440,43 +440,6 @@ export default function Navigation() {
               </Popover.Group>
 
               <div className="ml-auto flex items-center">
-                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  {authState?.reqUser ? (
-                    <div>
-                      <Avatar
-                        className="cursor-pointer text-white"
-                        onClick={handleUserClick}
-                        aria-haspopup="true"
-                        aria-expanded={openUserMenu ? "true" : undefined}
-                        id="basic-button"
-                        aria-controls={openUserMenu ? "basic-menu" : undefined}
-                      >
-                        {authState?.reqUser.firstName[0].toUpperCase()}
-                      </Avatar>
-                      <Menu
-                        id="basic-menu"
-                        anchorEl={anchorEl}
-                        onClose={handleCloseUserMenu}
-                        MenuListProps={{ "aria-labelledby": "basic-button" }}
-                        open={openUserMenu}
-                      >
-                        <MenuItem onClick={handleProfile}>Profile</MenuItem>
-                        <MenuItem onClick={handleMyOrderClick}>Orders</MenuItem>
-                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                      </Menu>
-                    </div>
-                  ) : (
-                    <>
-                      <Button
-                        className=" bg-primary"
-                        onClick={() => navigate("/login")}
-                      >
-                        Sign In
-                      </Button>
-                    </>
-                  )}
-                </div>
-
                 {/* Search */}
                 <div className="flex lg:ml-6">
                   <div className=" flex justify-start items-center py-7 relative">
@@ -525,6 +488,44 @@ export default function Navigation() {
                     <span className="sr-only">items in cart, view bag</span>
                   </a>
                 </div>
+              <div className="hidden ml-6 mr-2 lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                  {authState?.reqUser ? (
+                    <div>
+                      <Avatar
+                        className="cursor-pointer text-white"
+                        onClick={handleUserClick}
+                        aria-haspopup="true"
+                        aria-expanded={openUserMenu ? "true" : undefined}
+                        id="basic-button"
+                        aria-controls={openUserMenu ? "basic-menu" : undefined}
+                      >
+                        {authState?.reqUser.firstName[0].toUpperCase()}
+                      </Avatar>
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        onClose={handleCloseUserMenu}
+                        MenuListProps={{ "aria-labelledby": "basic-button" }}
+                        open={openUserMenu}
+                      >
+                        <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                        <MenuItem onClick={handleMyOrderClick}>Orders</MenuItem>
+                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                      </Menu>
+                    </div>
+                  ) : (
+                    <>
+                      <Button
+                        className=" bg-primary"
+                        onClick={() => navigate("/login")}
+                      >
+                        Sign In
+                      </Button>
+                    </>
+                  )}
+                </div>
+
+                
               </div>
             </div>
           </div>

@@ -101,7 +101,7 @@ export default function ProductList() {
   const param = useParams()
 
   const product = useSelector((state)=>state.product)
-  console.log(product.products.totalPages)
+  //console.log(product.products.totalPages)
   
 
   const handleCheckBoxFilter = (value, sectionId) => {

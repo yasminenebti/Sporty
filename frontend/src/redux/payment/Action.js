@@ -10,7 +10,7 @@ export const createPayment = (orderId) => async (dispatch) => {
 
     dispatch({ type: CREATE_PAYMENT_REQUEST });
     try {
-        const res = await axios.post(`${BASE_URL}/api/v1/payment/${orderId}` ,{
+        const res = await axios.get(`${BASE_URL}/api/v1/payment/${orderId}` ,{
             headers: {
                 "Content-Type": "application/json",
                 "Authorization" : `Bearer ${token}`

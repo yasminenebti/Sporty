@@ -92,6 +92,7 @@ public class ProductService {
                 .image(product.getImage())
                 .sizes(new HashSet<>(product.getSizes()))
                 .nbRating(product.getNbRating())
+                .review(product.getReview())
                 .createdAt(product.getCreatedAt())
                 .category(product.getCategory().getName())
                 .build();

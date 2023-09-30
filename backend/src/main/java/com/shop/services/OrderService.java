@@ -19,7 +19,12 @@ import com.shop.repository.AddressRepository;
 import com.shop.repository.OrderItemRepository;
 import com.shop.repository.OrderRepository;
 import com.shop.repository.UserRepository;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Product;
+import com.stripe.param.ProductCreateParams;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,6 +41,8 @@ public class OrderService {
     private final AuthService authService;
     private final AddressRepository addressRepository;
     private final CartService cartService;
+    @Value("${stripe.secretKey}")
+    private String secretKey;
     //private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
 
 
@@ -44,7 +51,9 @@ public class OrderService {
         return mapToOrderItemDTO(orderItemRepository.save(orderItem));
     }
 
-    public OrderRequest createOrder(Address shipAddress) throws UserException, CartException {
+    public OrderRequest createOrder(Address shipAddress) throws UserException, CartException, StripeException {
+        Stripe.apiKey = secretKey;
+
         UserRequest currentUser = authService.getCurrentUser();
         User orderUser = authService.getUserById(currentUser.getId());
         shipAddress.setUser(orderUser);
@@ -85,10 +94,17 @@ public class OrderService {
                 .build();
         Order saved = orderRepository.save(order);
 
+
         for (OrderItem item : orderItems){
             item.setOrder(order);
             orderItemRepository.save(item);
         }
+
+        Product.create(new ProductCreateParams.Builder()
+                .setId(saved.getId().toString())
+                .setName("order from sporty")
+                .setType(ProductCreateParams.Type.GOOD)
+                .build());
         return mapToOrderDto(saved);
     }
 
