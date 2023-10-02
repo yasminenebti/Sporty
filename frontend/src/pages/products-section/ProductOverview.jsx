@@ -7,9 +7,10 @@ import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { findSingleProduct, recentProducts } from "../../redux/products/Action";
 import { addItemToCart } from "../../redux/cart/Action";
-import { createReview, getReviewByProduct } from "../../redux/reviewAndRating/Action";
+import { createReview, getReviewByProduct } from "../../redux/review/Action";
 
 import { AiOutlineSend } from "react-icons/ai";
+import { getRatingByProduct } from "../../redux/rating/Action";
 
 
 function classNames(...classes) {
@@ -18,15 +19,28 @@ function classNames(...classes) {
 
 export default function ProductOverview() {
   const navigate = useNavigate();
-  const [selectedSize, setSelectedSize] = useState("");
   const dispatch = useDispatch();
-  const productState = useSelector((state) => state.product);
-  const currentProduct = productState?.product;
   const params = useParams();
+
+  const productState = useSelector((state) => state.product);
   const reviewState = useSelector((state) => state.review);
+  const ratingState = useSelector((state) => state.rating);
+
+
+  const currentProduct = productState?.product;
   const recentItems = productState?.recents;
+
+  const [selectedSize, setSelectedSize] = useState("");
+
+
   const [currentReviews , setCurrentReviews] = useState([])
+  const [currentRatings , setCurrentRatings] = useState([])
+
   const [addReview , setAddReview] = useState("")
+  const [addRating , setAddRating] = useState("")
+  const [overallRating , setOverallRating] = useState(0)
+
+
 
 
 
@@ -45,19 +59,42 @@ export default function ProductOverview() {
     dispatch(getReviewByProduct(params.id));
   }, [params.id]);
   useEffect(() => {
+    dispatch(getRatingByProduct(params.id));
+  }, [params.id]);
+
+  useEffect(() => {
     dispatch(recentProducts());
   }, [dispatch]);
 
   useEffect(()=>{
     setCurrentReviews(reviewState?.reviews)
-    
   },[reviewState?.reviews])
+
+  useEffect(()=>{
+    setCurrentRatings(ratingState?.ratings)
+  },[ratingState?.ratings])
 
   const handleCreateNewReview = () => {
     dispatch(createReview(addReview,params.id))
     //console.log(addReview)
     
   }
+
+  useEffect(() => {
+    const totalRating = currentRatings.length;
+  
+    if (totalRating > 0) {
+      const sumRating = currentRatings.reduce((accumulator, item) => accumulator + item.rating, 0);
+
+      const averageRating = sumRating / totalRating;
+  
+      setOverallRating(averageRating);
+    }
+  }, [currentRatings]);
+
+  console.log(overallRating)
+  
+  
 
   return (
     <div className="bg-white pt-24 lg:px-20">
@@ -89,10 +126,10 @@ export default function ProductOverview() {
               <h2 className="sr-only">{currentProduct?.description}</h2>
               <div className="flex space-x-5 items-center text-lg lg:text-xl">
                 <div className="font-semibold">
-                  {currentProduct?.discountedPrice}
+                  ${currentProduct?.discountedPrice}
                 </div>
                 <div className=" line-through opacity-50">
-                  {currentProduct?.price}
+                  ${currentProduct?.price}
                 </div>
                 <div className=" text-secondary font-semibold pl-10">
                   {currentProduct?.discount}% Off
@@ -102,10 +139,10 @@ export default function ProductOverview() {
               {/* Reviews */}
               <div className="mt-6">
                 <div className="flex items-center space-x-3">
-                  <Rating name="read-only" value={3.5} readOnly />
-                  <div className="opacity-50 text-sm">1000 ratings</div>
+                  <Rating name="read-only" value={overallRating} readOnly />
+                  <div className="opacity-50 text-sm">{currentRatings.length} ratings</div>
                   <div className="ml-3 text-sm font-semibold text-blue ">
-                    1000 review
+                    {currentProduct?.review.length} reviews
                   </div>
                 </div>
               </div>
@@ -137,7 +174,7 @@ export default function ProductOverview() {
                                     ? "cursor-pointer bg-white text-gray-900 shadow-sm"
                                     : "cursor-not-allowed bg-gray-50 text-gray-200",
                                   active ? "ring-2 ring-indigo-500" : "",
-                                  "group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6"
+                                  "group relative flex items-center justify-center rounded-md  py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6"
                                 )
                               }
                             >
@@ -198,7 +235,7 @@ export default function ProductOverview() {
               </form>
             </div>
 
-            <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:pb-16 lg:pr-8 lg:pt-6">
+            <div className="py-10 lg:col-span-2 lg:col-start-1  lg:pb-16 lg:pr-8 lg:pt-6">
               {/* Description and details */}
               <div>
                 <h3 className="sr-only">Description</h3>
@@ -215,7 +252,7 @@ export default function ProductOverview() {
 
         {/* Ratings and reviews */}
         <h1 className=" font-semibold text-lg pb-4 pt-16">
-          Reviews and ratings
+          Reviews
         </h1>
         <div className="border border-y border-grey p-5">
           <div>

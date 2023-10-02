@@ -1,4 +1,4 @@
-import {  LOGIN_ERROR, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT, REGISTER_ERROR, REGISTER_REQUEST, REGISTER_SUCCESS, REQ_USER, REQ_USER_ERROR, REQ_USER_SUCCESS, UPDATE_USER, UPDATE_USER_SUCCESS } from "./ACtionType"
+import {  LOGIN_ERROR, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT, REGISTER_ERROR, REGISTER_REQUEST, REGISTER_SUCCESS, REQ_USER, REQ_USER_ERROR, REQ_USER_SUCCESS, UPDATE_USER, UPDATE_USER_ERROR, UPDATE_USER_SUCCESS } from "./ACtionType"
 
 const initialState = {
     register: null,
@@ -24,10 +24,11 @@ export const authReducer = (state = initialState, action) => {
         case REQ_USER_SUCCESS:
             return { ...state, reqUser : action.payload , isLoading : false , error : false}
         case UPDATE_USER_SUCCESS:
-            return { ...state, updatedUser : action.payload}
+            return { ...state, updatedUser : action.payload, isLoading : false , error : false}
         case REGISTER_ERROR:
         case LOGIN_ERROR:
         case REQ_USER_ERROR:
+        case UPDATE_USER_ERROR:
             return { ...state, isLoading: false , error : action.payload };
         case LOGOUT:
             return { ...initialState}

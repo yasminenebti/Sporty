@@ -9,7 +9,7 @@ import { useNavigate } from "react-router";
 import { Avatar, Button, Menu, MenuItem } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUser, logoutAccount } from "../redux/auth/Action";
-import sportImage from "../assets/sport.png"; // Import the image file
+import sportImage from "../assets/sport.png";
 
 const navigation = {
   categories: [
@@ -24,7 +24,7 @@ const navigation = {
             "https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg",
           imageAlt:
             "Models sitting back to back, wearing Basic Tee in black and bone.",
-        }
+        },
       ],
       sections: [
         {
@@ -69,7 +69,6 @@ const navigation = {
           imageAlt:
             "Drawstring top with elastic loop closure and textured interior padding.",
         },
-       
       ],
       sections: [],
     },
@@ -89,6 +88,7 @@ export default function Navigation() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const authState = useSelector((state) => state.authState);
+  const user = authState?.reqUser;
 
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -105,8 +105,8 @@ export default function Navigation() {
     navigate(`/${category.name}/${section.name}/${item.name}`);
     close();
   };
-  const handleProfile = () => {
-    navigate("/");
+  const handleAccountSettings = () => {
+    navigate("/account/settings");
   };
 
   const handleLogout = () => {
@@ -123,7 +123,7 @@ export default function Navigation() {
   }, [dispatch, navigate]);
 
   return (
-    <div className="bg-white pb-10">
+    <div className="bg-white ">
       {/* Mobile menu */}
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
@@ -190,11 +190,8 @@ export default function Navigation() {
                         className="space-y-10 px-4 pb-8 pt-10"
                       >
                         <div className="grid grid-cols-2 gap-x-4">
-                          {category.featured.map((item,index) => (
-                            <div
-                              key={index}
-                              className="group relative text-sm"
-                            >
+                          {category.featured.map((item, index) => (
+                            <div key={index} className="group relative text-sm">
                               <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                                 <img
                                   src={item.imageSrc}
@@ -212,11 +209,10 @@ export default function Navigation() {
                                 />
                                 {item.name}
                               </a>
-                             
                             </div>
                           ))}
                         </div>
-                        {category.sections.map((section,index) => (
+                        {category.sections.map((section, index) => (
                           <div key={index}>
                             <p
                               id={`${category.id}-${section.id}-heading-mobile`}
@@ -232,18 +228,18 @@ export default function Navigation() {
                               {section.items.map((item) => (
                                 <li key={item.name} className="flow-root">
                                   <p
-                                                  onClick={() =>
-                                                    handleCategoryClick(
-                                                      category,
-                                                      section,
-                                                      item,
-                                                      close
-                                                    )
-                                                  }
-                                                  className="cursor-pointer hover:text-fog"
-                                                >
-                                                  {item.name}
-                                                </p>
+                                    onClick={() =>
+                                      handleCategoryClick(
+                                        category,
+                                        section,
+                                        item,
+                                        close
+                                      )
+                                    }
+                                    className="cursor-pointer hover:text-fog"
+                                  >
+                                    {item.name}
+                                  </p>
                                 </li>
                               ))}
                             </ul>
@@ -255,15 +251,24 @@ export default function Navigation() {
                 </Tab.Group>
 
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                  {authState?.reqUser ? (
+                  {user ? (
                     <div className="flow-root">
-                      <Avatar
-                        className="cursor-pointer text-white"
-                        onClick={handleProfile}
-                      >
-                        {authState?.reqUser.firstName[0].toUpperCase()}
-                      </Avatar>
-                      
+                      {user?.picture ? (
+                        <Avatar
+                          className=" cursor-pointer"
+                          onClick={handleAccountSettings}
+                          alt="Remy Sharp"
+                          src={user?.picture}
+                          sx={{ width: 72, height: 72 }}
+                        />
+                      ) : (
+                        <Avatar
+                          className="cursor-pointer text-white"
+                          onClick={handleAccountSettings}
+                        >
+                          {user.firstName[0].toUpperCase()}
+                        </Avatar>
+                      )}
                     </div>
                   ) : (
                     <div className="flow-root">
@@ -348,7 +353,7 @@ export default function Navigation() {
                                 <div className="mx-auto max-w-7xl px-8">
                                   <div className="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
                                     <div className="col-start-2 grid grid-cols-2 gap-x-8">
-                                      {category.featured.map((item,index) => (
+                                      {category.featured.map((item, index) => (
                                         <div
                                           key={index}
                                           className="group relative text-base sm:text-sm"
@@ -380,42 +385,44 @@ export default function Navigation() {
                                       ))}
                                     </div>
                                     <div className="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
-                                      {category.sections.map((section,index) => (
-                                        <div key={index}>
-                                          <p
-                                            id={`${category.id}-${section.id}-heading`}
-                                            className="font-medium text-gray-900"
-                                          >
-                                            {section.name}
-                                          </p>
-                                          <ul
-                                            role="list"
-                                            aria-labelledby={`${category.id}-${section.id}-heading`}
-                                            className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
-                                          >
-                                            {section.items.map((item) => (
-                                              <li
-                                                key={item.name}
-                                                className="flex"
-                                              >
-                                                <p
-                                                  onClick={() =>
-                                                    handleCategoryClick(
-                                                      category,
-                                                      section,
-                                                      item,
-                                                      close
-                                                    )
-                                                  }
-                                                  className="cursor-pointer hover:text-fog"
+                                      {category.sections.map(
+                                        (section, index) => (
+                                          <div key={index}>
+                                            <p
+                                              id={`${category.id}-${section.id}-heading`}
+                                              className="font-medium text-gray-900"
+                                            >
+                                              {section.name}
+                                            </p>
+                                            <ul
+                                              role="list"
+                                              aria-labelledby={`${category.id}-${section.id}-heading`}
+                                              className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
+                                            >
+                                              {section.items.map((item) => (
+                                                <li
+                                                  key={item.name}
+                                                  className="flex"
                                                 >
-                                                  {item.name}
-                                                </p>
-                                              </li>
-                                            ))}
-                                          </ul>
-                                        </div>
-                                      ))}
+                                                  <p
+                                                    onClick={() =>
+                                                      handleCategoryClick(
+                                                        category,
+                                                        section,
+                                                        item,
+                                                        close
+                                                      )
+                                                    }
+                                                    className="cursor-pointer hover:text-fog"
+                                                  >
+                                                    {item.name}
+                                                  </p>
+                                                </li>
+                                              ))}
+                                            </ul>
+                                          </div>
+                                        )
+                                      )}
                                     </div>
                                   </div>
                                 </div>
@@ -488,19 +495,25 @@ export default function Navigation() {
                     <span className="sr-only">items in cart, view bag</span>
                   </a>
                 </div>
-              <div className="hidden ml-6 mr-2 lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                <div className="hidden ml-6 mr-2 lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                   {authState?.reqUser ? (
                     <div>
-                      <Avatar
-                        className="cursor-pointer text-white"
-                        onClick={handleUserClick}
-                        aria-haspopup="true"
-                        aria-expanded={openUserMenu ? "true" : undefined}
-                        id="basic-button"
-                        aria-controls={openUserMenu ? "basic-menu" : undefined}
-                      >
-                        {authState?.reqUser.firstName[0].toUpperCase()}
-                      </Avatar>
+                      {user?.picture ? (
+                        <Avatar
+                          className=" cursor-pointer"
+                          onClick={handleUserClick}
+                          alt="Remy Sharp"
+                          src={user?.picture}
+                          sx={{ width: 46, height: 46 }}
+                        />
+                      ) : (
+                        <Avatar
+                          className="cursor-pointer text-white"
+                          onClick={handleUserClick}
+                        >
+                          {user.firstName[0].toUpperCase()}
+                        </Avatar>
+                      )}
                       <Menu
                         id="basic-menu"
                         anchorEl={anchorEl}
@@ -508,7 +521,9 @@ export default function Navigation() {
                         MenuListProps={{ "aria-labelledby": "basic-button" }}
                         open={openUserMenu}
                       >
-                        <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                        <MenuItem onClick={handleAccountSettings}>
+                          Account
+                        </MenuItem>
                         <MenuItem onClick={handleMyOrderClick}>Orders</MenuItem>
                         <MenuItem onClick={handleLogout}>Logout</MenuItem>
                       </Menu>
@@ -524,8 +539,6 @@ export default function Navigation() {
                     </>
                   )}
                 </div>
-
-                
               </div>
             </div>
           </div>

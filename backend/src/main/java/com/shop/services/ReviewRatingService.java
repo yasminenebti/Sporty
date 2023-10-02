@@ -31,9 +31,10 @@ public class ReviewRatingService {
     private final ProductRepository productRepository;
     private final AuthService authService;
 
-    public Rating addRating (double rating,Long productId,Long userId) throws ProductException, UserException {
+    public Rating addRating (double rating,Long productId) throws ProductException, UserException {
         Product product= productService.findProductById(productId);
-        User user = authService.getUserById(userId);
+        UserRequest currentUser = authService.getCurrentUser();
+        User user = authService.getUserById(currentUser.getId());
         Rating createdRating = Rating
                 .builder()
                 .product(product)
@@ -41,6 +42,9 @@ public class ReviewRatingService {
                 .rating(rating)
                 .createdAt(LocalDateTime.now())
                 .build();
+        Rating newRating= ratingRepository.save(createdRating);
+        product.getRating().add(newRating);
+        productRepository.save(product);
         return ratingRepository.save(createdRating);
     }
 

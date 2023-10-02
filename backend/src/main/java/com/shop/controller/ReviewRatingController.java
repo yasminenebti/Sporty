@@ -26,4 +26,14 @@ public class ReviewRatingController {
     public ResponseEntity<?> getReviewByProduct(@PathVariable Long productId) {
         return ResponseEntity.ok(reviewRatingService.getReviewsProduct(productId));
     }
+
+    @PostMapping("/rating/{productId}")
+    public ResponseEntity<?> createRating(@RequestBody double rating , @PathVariable Long productId) throws UserException, ProductException {
+        return ResponseEntity.ok(reviewRatingService.addRating(rating,productId));
+    }
+
+    @GetMapping("/rating/{productId}")
+    public ResponseEntity<?> getRatingByProduct(@PathVariable Long productId) {
+        return ResponseEntity.ok(reviewRatingService.getRatingsProduct(productId));
+    }
 }

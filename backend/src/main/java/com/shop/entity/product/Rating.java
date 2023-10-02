@@ -1,5 +1,6 @@
 package com.shop.entity.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shop.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,10 +23,12 @@ public class Rating {
 
     @ManyToOne
     @JoinColumn(name="userId")
+    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name="productId")
+    @JsonIgnore
     private Product product;
 
     private double rating;

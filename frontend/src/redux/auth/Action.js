@@ -74,7 +74,9 @@ export const currentUser = () => async (dispatch) => {
 
 
 
-export const updateProfile =(id,userRequest,token) =>async(dispatch) => {
+export const updateProfile =(id,userRequest) =>async(dispatch) => {
+    const token = localStorage.getItem("token")
+
     dispatch({type:UPDATE_USER})
 
     try {
@@ -98,4 +100,6 @@ export const logoutAccount =() =>async(dispatch) => {
     localStorage.clear()
     dispatch({type:LOGOUT , payload:null})
 }
+
+
 

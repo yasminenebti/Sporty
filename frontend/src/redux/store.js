@@ -5,7 +5,8 @@ import { productReducer } from "./products/Reducer";
 import { cartReducer } from "./cart/Reducer";
 import { orderReducer } from "./order/Reducer";
 import { categoryReducer } from "./category/Reducer";
-import { reviewReducer } from "./reviewAndRating/Reducer";
+import { reviewReducer } from "./review/Reducer";
+import { ratingReducer } from "./rating/Reducer";
 
 const rootReducer = combineReducers({
     authState : authReducer,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
     cart : cartReducer,
     order : orderReducer,
     category : categoryReducer,
-    review : reviewReducer
+    review : reviewReducer,
+    rating : ratingReducer
     
 })
 
