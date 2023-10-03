@@ -1,7 +1,6 @@
 import { Box, Grid, TextField, Avatar, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
 import { currentUser, updateProfile } from "../../redux/auth/Action";
 import { BiEdit } from "react-icons/bi";
 import axios from "axios";
@@ -12,9 +11,7 @@ const Profile = () => {
 
   const [picture, setPicture] = useState(null);
   const [edit, setEdit] = useState(false);
-  const [firstName , setFirstName] = useState(false)
-  const [lastName , setLastName] = useState(false)
-  const [editEmail , setEditEmail] = useState(false)
+ 
 
   const user = authState?.reqUser;
   const currentUserId = authState.reqUser?.id;

@@ -4,11 +4,10 @@ import AliceCarousel from 'react-alice-carousel';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useEffect, useState } from 'react';
-import { homeCarouselData } from '../carousel/HomeCarouselData';
 import { useDispatch, useSelector } from 'react-redux';
 import { recentProducts } from '../../redux/products/Action';
 
-const ProductsCarousel = ({data,sectionName}) => {
+const ProductsCarousel = () => {
   const dispatch = useDispatch();
   const productState = useSelector((state) => state.product);
   const recentItems = productState?.recents
@@ -20,7 +19,6 @@ const ProductsCarousel = ({data,sectionName}) => {
         1024: { items: 5 },
     };
 
-     //const items = recentItems.map((item, key) => {return <HomeCards item={item}  key={key} />;});
      const items = recentItems.map((item, key) => <HomeCards item={item}  key={key} />);
 
 

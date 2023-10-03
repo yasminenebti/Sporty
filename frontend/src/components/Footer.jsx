@@ -1,22 +1,54 @@
-import { Grid, Typography } from "@mui/material"
+import {  Typography } from "@mui/material"
 
 const Footer = () => {
   return (
-    <div>
-        <Grid container sx={{py:3 , color:"white",bgcolor:"black"}} className=" bg-brown text-center mt-10">
-            <Grid item xs={12} sm={6} md={3}>
-                <Typography variant="h6" className="pb-5">Company</Typography>
-                <Typography variant="h6" className="pb-5">About</Typography>
-
-            </Grid>
-
-            <Grid className="pt-20" item xs={12}>
-                <Typography variant="body2" component="p" align="center">
-                    2023 My Company. All rights reserved
-                </Typography>
-            </Grid>
-        </Grid>
-    </div>
+    <footer className="flex w-full mt-24 px-4 flex-row flex-wrap items-center justify-center gap-y-4 bg-smoky text-white  gap-x-12 border-t border-grey py-4 text-center md:justify-between">
+      <Typography color="blue-gray" className="font-normal">
+        &copy; 2023 My Company
+      </Typography>
+      <ul className="flex flex-wrap items-center gap-y-2 gap-x-8">
+        <li>
+          <Typography
+            as="a"
+            href="#"
+            color="blue-gray"
+            className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500"
+          >
+            About Us
+          </Typography>
+        </li>
+        <li>
+          <Typography
+            as="a"
+            href="#"
+            color="blue-gray"
+            className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500"
+          >
+            License
+          </Typography>
+        </li>
+        <li>
+          <Typography
+            as="a"
+            href="#"
+            color="blue-gray"
+            className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500"
+          >
+            Contribute
+          </Typography>
+        </li>
+        <li>
+          <Typography
+            as="a"
+            href="#"
+            color="blue-gray"
+            className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500"
+          >
+            Contact Us
+          </Typography>
+        </li>
+      </ul>
+    </footer>
   )
 }
 

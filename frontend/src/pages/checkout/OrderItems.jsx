@@ -228,14 +228,7 @@ const OrderItems = () => {
                     </p>
                   </div>
                   
-                  {/* <div className="flex justify-center md:justify-start  items-center md:items-start flex-col space-y-4 ">
-                    <p className="text-base font-semibold leading-4 text-center md:text-left text-gray-800">
-                      Billing Address
-                    </p>
-                    <p className="w-48 lg:w-full xl:w-48 text-center md:text-left text-sm leading-5 text-gray-600">
-                      180 North King Street, Northhampton MA 1060
-                    </p>
-                  </div> */}
+                  
                 </div>
                 <div onClick={handlePayment} className="flex w-full justify-center items-center md:justify-start md:items-start">
                   <button className=" bg-primary text-white hover:bg-secondary mt-6 md:mt-0 py-5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 font-medium w-96 2xl:w-full text-base ">

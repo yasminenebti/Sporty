@@ -10,7 +10,7 @@ import { logoutAccount } from "../../redux/auth/Action";
 const Account = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch()
-  const [currentTab, setCurrentTab] = useState("Profile"); // Default to "Profile"
+  const [currentTab, setCurrentTab] = useState("Profile"); 
 
   const handleTabClick = (tabName) => {
     setCurrentTab(tabName);
